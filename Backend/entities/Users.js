@@ -24,8 +24,8 @@ const Users = db.define('Users', {
         validate:{
             isEmail: true,
             isCorrEmail(value){
-                if(!value.endsWith('@support.ro')){
-                    throw new Error('Email must end with @support.ro');
+                if(!value.endsWith('@rhodon.ro')){
+                    throw new Error('Email must end with @rhodon.ro');
                 }
             }
         }

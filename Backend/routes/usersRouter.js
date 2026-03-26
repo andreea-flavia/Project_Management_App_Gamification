@@ -50,16 +50,16 @@ usersRouter.route('/user/:id')
 usersRouter.route('/login')
     .post(async(req,res) => {
         try{
-            const {user_mail, user_password_hash} = req.body;
-            const user = await getUserByEmail(user_mail);
+            const {email, password} = req.body;
+            const user = await getUserByEmail(email);
 
             if(!user){
-                return res.status(404).json({error: 'User not found! Please register first.'});
+                return res.status(404).json({error: 'Utilizatorul nu exista!'});
             }
 
-            const passwordMatch = await bcrypt.compare(user_password_hash, user.user_password_hash);
+            const passwordMatch = await bcrypt.compare(password, user.user_password_hash);
             if(!passwordMatch){
-                return res.status(401).json({error: 'Incorrect password'});
+                return res.status(401).json({error: 'Parola incorecta!'});
             }
 
             return res.status(200).json({
@@ -72,7 +72,7 @@ usersRouter.route('/login')
                 function: user.function
             }});
         } catch(e){
-            return res.status(500).json({error: 'Server error'});
+            return res.status(500).json({error: 'Eroare de server'});
         }
     });
 

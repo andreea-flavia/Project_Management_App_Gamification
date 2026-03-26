@@ -1,20 +1,52 @@
 import './LoginPage.css'
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
 
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const [error, setError] = useState('');
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError('');
+        try {
+
+            if (!email.trim() && !password.trim()) {
+                setError("Completeaza ambele campuri!");
+                return;
+            }
+            if (!email.trim()) {
+                setError("Completeaza campul mail!");
+                return;
+            }
+            if (!password.trim()) {
+                setError("Completeaza campul parola!");
+                return;
+            }
+
+            const r = await axios.post('http://localhost:9000/api/login', { email, password });
+            if (r.data.success) {
+                localStorage.setItem('user_name', r.data.user.first_name);
+                navigate('/home');
+            }
+        } catch(e) {
+            const m = e.response?.data?.error || 'Eroare de autentificare';
+            setError(m);
+        }
+    }
 
     return (
         <div className='background'>
-            {/* <h1 className='title'>Login Page</h1> */}
-
             <main className='grid'>
                 <section className="sectiune_imagine">
                     <div className ='brand'>
                         <span className="brand_name">RHODON</span>
-                        <span className="brand_tagline">// SECURE_TERMINAL_v2.0</span>
+                        <span className="brand_tagline">SECURE_TERMINAL_v2.0</span>
                     </div>
                     <img src='/green_bg.jpg' alt="Dream Big" className='imagine'/>
                 </section>
@@ -29,7 +61,13 @@ const LoginPage = () => {
                             <div class = 'input_line'>
                                 <label className="input_label">Mail</label>
                                 <div className = "input_container">
-                                    <input type="text" placeholder="ex: flavia.tanasescu@office.ro" spellCheck="false" />
+                                    <input 
+                                        type="email" 
+                                        placeholder="ex: flavia.tanasescu@rhodon.ro" 
+                                        spellCheck="false" 
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
                                 </div>
                             </div>
                             <div class = 'input_line'>
@@ -55,14 +93,20 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        <button className='btn_auth'>
+                        {error && (
+                            <div className="auth_error_text">
+                                {error}
+                            </div>
+                        )}
+
+                        <button className='btn_auth' onClick={handleLogin}>
                             <span className="btn_text">Autentificare</span>
                         </button>
 
                         <div className ="req_access">
                             <p className="req_text">Prima oara?</p>
                             <button type="button" className="req_btn">
-                                Solicta un cont!
+                                Solicita un cont!
                             </button>
                         </div>
 

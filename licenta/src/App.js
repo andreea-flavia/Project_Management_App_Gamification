@@ -14,6 +14,7 @@ function App() {
         {/* pentru cand bag token.. dac anu esti auth te baga in login altfel te duce direct in home */}
         
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/home" element={<HomePage />} />
       </Routes>
     </Router>
   );
