@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './HomePage.css';
 
 const HomePage =() => {
     const [user, setUser] = useState("Guest");
@@ -12,9 +13,9 @@ const HomePage =() => {
     
     return (
         <div>
-            <h1>Home Page</h1>
-            <p>Bine ai venit, {user}!</p>
-            <p className="system_status">SYSTEM_ACCESS_GRANTED // SESSION_ACTIVE</p>
+            <h1 className="basic">Home Page</h1>
+            <p className="basic">Bine ai venit, {user}!</p>
+            <p className="basic">SYSTEM_ACCESS_GRANTED // SESSION_ACTIVE</p>
         </div>
     )
 }

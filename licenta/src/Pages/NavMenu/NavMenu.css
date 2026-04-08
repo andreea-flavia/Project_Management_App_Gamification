@@ -1,0 +1,105 @@
+.menu_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(187, 190, 190, 0.2);
+    opacity: 0.9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+}
+
+.menu_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 180px);
+    gap: 25px;
+    padding: 20px;
+}
+
+.menu_card {
+    /* background: var(--surface-light); */
+    height: 160px;
+    border-radius: 8px;
+    border: 1px solid var(--primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+
+.menu_card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    background: var(--primary);
+    
+}
+
+.menu_icon {
+    color: var(--secondary);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+
+
+.menu_label {
+    font-family: var(--font-mono);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.menu_card:hover .menu_label  {
+    color: var(--on-surface-variant);
+}
+
+.menu_card:hover .menu_icon {
+    color: var(--on-surface-variant);
+}
+
+
+.close_btn, .logout_btn {
+    margin-top: 0;
+    background: transparent;
+    border: 1px solid var(--secondary);
+    color: var(--secondary);
+    font-family: var(--font-mono);
+    padding: 12px 40px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: 0.3s;
+}
+
+.close_btn:hover, .logout_btn:hover {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--on-surface-variant);
+}
+
+
+.menu_actions {
+    margin-top: 50px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+}
+

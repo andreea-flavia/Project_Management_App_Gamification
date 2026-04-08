@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import Users from '../entities/Users.js';
-import usersRouter from '../routes/usersRouter.js';
 
 async function createUser(user) {
     try{
@@ -54,33 +53,6 @@ async function deleteUser(id){
 async function getUserByEmail(email){
     return await Users.findOne({where: {user_mail: email}});
 }
-
-// async function login (req, res) {
-//     const { email, password } = req.body;
-
-//     try{
-//         const user = await getUserByEmail(email);
-//         if(!user){
-//             return res.status(404).json({ message: 'Utilizatorul nu exista!' });
-//         }
-
-//         const gasit = await bcrypt.compare(password, user.user_password_hash);
-//         if(gasit){
-//             return res.status(200).json({ 
-//                 success: true, 
-//                 user: {
-//                     id: user.user_id,
-//                     first_name: user.first_name,
-//                     picture_url: user.picture_url
-//                 } 
-//             });
-//         } else {
-//             return res.status(401).json({ message: 'Parola incorecta!' });
-//         }
-//     } catch (e){
-//         res.status(500).json({ success: false, message: "Eroare de server" });
-//     }
-// }
 
 
 

@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import express from 'express';
 import bcrypt from 'bcrypt';
 import {
@@ -43,6 +44,14 @@ usersRouter.route('/user/:id')
         return res.status(404).json({error: 'User not found'});
     });
 
+usersRouter.route('/user/mail/:mail')
+    .get(async(req, res) => {
+        const user = await getUserByEmail(req.params.mail);
+        if(user) 
+            return res.json(user);
+        return res.status(404).json({error: 'User not found'});
+    });
+
 
 
 
@@ -62,8 +71,18 @@ usersRouter.route('/login')
                 return res.status(401).json({error: 'Parola incorecta!'});
             }
 
+            const token = jwt.sign({
+                userId: user.user_id,
+                function: user.function
+            },
+            process.env.JWT_SECRET,
+            {expiresIn: '2h'}
+            );
+
             return res.status(200).json({
+            message: "login succesful",
             success: true,
+            token,
             user: {
                 id: user.user_id,
                 email: user.user_mail,
@@ -72,9 +91,14 @@ usersRouter.route('/login')
                 function: user.function
             }});
         } catch(e){
-            return res.status(500).json({error: 'Eroare de server'});
+            return res.status(500).json({error: e+ ' Eroare de server'});
         }
     });
 
+    // res.status(500).json({ 
+    //         message: 'server error', 
+    //         error: err.message,   
+    //         details: err.original?.sqlMessage || err.name 
+    //     });
 
 export default usersRouter;
