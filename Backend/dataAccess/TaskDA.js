@@ -1,4 +1,6 @@
 import Tasks from '../entities/Tasks.js';
+import Priorities from '../entities/Nom_priority.js';
+import Statuses from '../entities/Nom_status.js';
 
 async function createTask(task) {
     try{
@@ -18,6 +20,11 @@ async function getTasks() {
 
 async function getTaskById(id) {
     return await Tasks.findByPk(id);
+}
+
+async function getTasksByUserId(userId) {
+    const tasks = await Tasks.findAll({ where: { assigned_to: userId } });
+    return tasks;
 }
 
 async function updateTask(id, taskData){
@@ -42,5 +49,6 @@ export {
     getTasks,
     getTaskById,
     updateTask,
-    deleteTask
+    deleteTask,
+    getTasksByUserId
 }

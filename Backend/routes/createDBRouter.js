@@ -7,8 +7,8 @@ let createDbRouter = express.Router();
 
 createDbRouter.route('/create').get(async (req, res) => {
     try{
-        // await db.sync({force : true})
-        await db.sync({alter : true})
+        await db.sync({force : true})
+        // await db.sync({alter : true})
 
         const statuses=[
             {status_name: 'UNASIGNED', status_description: 'Task not assigned', status_type: 'TASK', color: '#000000'},
@@ -21,9 +21,9 @@ createDbRouter.route('/create').get(async (req, res) => {
         await Statuses.bulkCreate(statuses);
 
         const priorities=[
-            {priority_name: 'LOW', priority_description: 'Low priority', priority_type: 'TASK', color: '#00FF00'},
-            {priority_name: 'MEDIUM', priority_description: 'Medium priority', priority_type: 'TASK', color: '#FFFF00'},
-            {priority_name: 'HIGH', priority_description: 'High priority', priority_type: 'TASK', color: '#FF0000'},
+            {priority_name: 'LOW', priority_description: 'Low priority', priority_type: 'TASK', color: '#689868'},
+            {priority_name: 'MEDIUM', priority_description: 'Medium priority', priority_type: 'TASK', color: '#dfdf55'},
+            {priority_name: 'HIGH', priority_description: 'High priority', priority_type: 'TASK', color: '#9b4949'},
         ];
 
         await Priorities.bulkCreate(priorities);

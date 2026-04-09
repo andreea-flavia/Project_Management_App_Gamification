@@ -11,3 +11,8 @@ Logica for later:
 Creez tabela useri in care parola este pastrata sub forma hash pentru securitate
 Creez pagina Login si Home Page
 Adaug token de securitate (JWT (JSON Web Token))
+
+
+in LocalStorage avem:
+user_name
+user_token

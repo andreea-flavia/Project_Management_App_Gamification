@@ -5,7 +5,8 @@ import {
     getTasks,
     getTaskById,
     updateTask,
-    deleteTask
+    deleteTask,
+    getTasksByUserId
 } from '../dataAccess/TaskDA.js';
 
 let tasksRouter = express.Router();
@@ -43,5 +44,10 @@ tasksRouter.route('/task/:id')
         return res.status(404).json({error: 'Task not found'});
     });
 
+tasksRouter.route('/tasks/user/:userId')
+    .get(async(req, res) => {
+        const tasks = await getTasksByUserId(req.params.userId);
+        return res.json(tasks);
+    });
 
     export default tasksRouter;
