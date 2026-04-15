@@ -31,3 +31,24 @@
     max-width: 1400px;
     margin: 0 auto;
 }
+
+.titlu_vertical{
+    position: fixed;
+    top: 100px; 
+    left: 40px; 
+    width: 50px; 
+    display: flex;
+    justify-content: center;
+    font-family: var(--font-headline);
+    font-weight: 800;
+    font-size: 32px;
+    text-transform: uppercase;
+    color: var(--primary);
+    filter: drop-shadow(0 0 12px rgba(0, 255, 65, 0.4));
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    letter-spacing: 12px;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 10;
+}

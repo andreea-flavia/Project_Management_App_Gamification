@@ -51,6 +51,12 @@ const Tasks =() => {
         fetch();
     }, []);
 
+    const formatareData = (date) => {
+        if(!date) return 'No Deadline Specified';
+        const d = new Date(date);
+        return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d);
+    };
+
 
     // const getStatusName = (id) => {
     //     const gasit = status
@@ -86,6 +92,7 @@ const Tasks =() => {
                             <div className='task_info'>
                                 <h4>{task.task_title}</h4>
                                 <p>{task.task_description}</p>
+                                <p>tagurile</p>
                             </div>
                             <div className='task_status'>
                                 <div className="tag" style={{ backgroundColor: pColorMap[task.priority] || '#7a7878' }}>
@@ -96,6 +103,11 @@ const Tasks =() => {
                                     <p className="label">Status</p>
                                     {/* <p className="val">{task.status_name || task.status}</p> */}
                                     <p className='val'>{sMap[task.status] || task.status}</p>
+                                </div>
+                                <div className="status_text">
+                                    <p className="label">Deadline</p>
+                                    {/* <p className="val">{task.status_name || task.status}</p> */}
+                                    <p className='val'>{formatareData(task.end_date)}</p>
                                 </div>
                                 <div className='status_text'>
                                     <p className='val'>{task.xp_points} XP</p>

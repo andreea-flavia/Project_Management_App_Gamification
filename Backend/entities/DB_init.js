@@ -5,6 +5,8 @@ import Tasks from './Tasks.js';
 import Projects from './Projects.js';
 import Statuses from './Nom_status.js';
 import Priorities from './Nom_priority.js';
+import Nom_Tags from './Nom_tags.js';
+import Tasks_Tags from './Tasks_Tags.js';
 
 env.config();
 
@@ -45,6 +47,10 @@ function PK_Config(){
 
     Priorities.hasMany(Projects, {foreignKey: 'priority'});
     Projects.belongsTo(Priorities, {foreignKey: 'priority'});
+
+//------------- n-n -------------//
+    Tasks.belongsToMany(Nom_Tags, { through: 'Tasks_Tags', foreignKey: 'task_id' , as: 'tags'});
+    Nom_Tags.belongsToMany(Tasks, { through: 'Tasks_Tags', foreignKey: 'tag_id', as: 'tasks' });
 
 }
 

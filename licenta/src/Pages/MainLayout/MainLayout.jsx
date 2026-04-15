@@ -16,6 +16,10 @@ const MainLayout = () => {
                 <span className="material-symbols-outlined">menu</span>
             </button>
 
+            <div className='titlu_vertical'>
+                RHODON
+            </div>
+
             <NavMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
             <div className="page_content">
                 <Outlet />

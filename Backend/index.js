@@ -10,6 +10,8 @@ import usersRouter from './routes/usersRouter.js';
 import tasksRouter from './routes/tasksRouter.js';
 import nomStatusRouter from './routes/Nom_StatusRouter.js';
 import nomPriorityRouter from './routes/Nom_PriorityRouter.js';
+import nomTagsRouter from './routes/Nom_TagsRouter.js';
+import nomTT from './routes/Task_TagsRouter.js';
 
 const app = express();
 app.use(cors()); 
@@ -23,6 +25,8 @@ app.use('/api', usersRouter);
 app.use('/api', tasksRouter);
 app.use('/api', nomStatusRouter);
 app.use('/api', nomPriorityRouter);
+app.use('/api', nomTagsRouter);
+app.use('/api', nomTT);
 
 let port = process.env.PORT || 9000;
 app.listen(port);
