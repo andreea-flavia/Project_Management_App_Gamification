@@ -31,7 +31,8 @@ const LoginPage = () => {
 
             const r = await axios.post('http://localhost:9000/api/login', { email, password });
             if (r.data.token) {
-                localStorage.setItem('user_name', r.data.user.first_name);
+                localStorage.setItem('user_first_name', r.data.user.first_name);
+                localStorage.setItem('user_last_name', r.data.user.last_name);
                 localStorage.setItem('user_id', r.data.user.id);
                 localStorage.setItem('user_token',r.data.token)
                 navigate('/home');

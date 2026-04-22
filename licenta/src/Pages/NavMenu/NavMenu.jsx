@@ -14,7 +14,7 @@ const NavMenu = ({isOpen, onClose}) => {
         {name: 'Tasks', path:  '/tasks', icon: 'checklist'},
         {name: 'Projects', path:  '/projects', icon: 'account_tree'},
         {name: 'My Team', path:  '/team', icon: 'group'},
-        {name: 'My Progress', path:  '/account', icon: 'account_circle'},
+        {name: 'My Progress', path:  '/profile', icon: 'account_circle'},
         {name: 'Settings', path:  '/settings', icon: 'settings'}
         
     ];

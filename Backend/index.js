@@ -12,11 +12,14 @@ import nomStatusRouter from './routes/Nom_StatusRouter.js';
 import nomPriorityRouter from './routes/Nom_PriorityRouter.js';
 import nomTagsRouter from './routes/Nom_TagsRouter.js';
 import nomTT from './routes/Task_TagsRouter.js';
+import userStats from './entities/User_Stats.js';
 
+// Backend\entities\User_Stats.js
 const app = express();
 app.use(cors()); 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(express.static('../Frontend/licenta/public'));
 
 DB_init();
 
@@ -27,6 +30,7 @@ app.use('/api', nomStatusRouter);
 app.use('/api', nomPriorityRouter);
 app.use('/api', nomTagsRouter);
 app.use('/api', nomTT);
+app.use('/api', userStats);
 
 let port = process.env.PORT || 9000;
 app.listen(port);

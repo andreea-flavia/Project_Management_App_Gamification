@@ -7,6 +7,7 @@ import Statuses from './Nom_status.js';
 import Priorities from './Nom_priority.js';
 import Nom_Tags from './Nom_tags.js';
 import Tasks_Tags from './Tasks_Tags.js';
+import User_Stats from './User_Stats.js';
 
 env.config();
 
@@ -51,6 +52,10 @@ function PK_Config(){
 //------------- n-n -------------//
     Tasks.belongsToMany(Nom_Tags, { through: 'Tasks_Tags', foreignKey: 'task_id' , as: 'tags'});
     Nom_Tags.belongsToMany(Tasks, { through: 'Tasks_Tags', foreignKey: 'tag_id', as: 'tasks' });
+
+// ------------- 1-1 -------------//
+    Users.hasOne(User_Stats, {foreignKey: 'user_id'});
+    User_Stats.belongsTo(Users, {foreignKey: 'user_id'});
 
 }
 

@@ -7,6 +7,8 @@ import HomePage from './Pages/HomePage';
 import MainLayout from './Pages/MainLayout';
 import Tasks from './Pages/Tasks';
 import ProtectedRoute from './Pages/ProtectedRoute.jsx';
+import TaskForm from './Pages/TaskForm';
+import UserProfile from './Pages/UserProfile';
 
 function App() {
   return (
@@ -22,6 +24,9 @@ function App() {
             <Route element={<MainLayout />}>
                   <Route path="/home" element={<HomePage />} />
                   <Route path="/tasks" element={<Tasks />} />
+                  <Route path="/tasks/new" element={<TaskForm />} />
+                  <Route path="/tasks/edit/:id" element={<TaskForm />} />
+                  <Route path="/profile" element={<UserProfile />} />
             </Route>
         </Route>
 

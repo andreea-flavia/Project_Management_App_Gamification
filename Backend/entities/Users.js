@@ -46,6 +46,17 @@ const Users = db.define('Users', {
         type: Sequelize.STRING,
         allowNull: false
     }
+    // ,
+    // xp_points:{
+    //     type: Sequelize.INTEGER,
+    //     allowNull: false,
+    //     defaultValue: 0
+    // },
+    // level:{
+    //     type: Sequelize.INTEGER,
+    //     allowNull: false,
+    //     defaultValue: 1
+    // }
 },{
     timestamps: true
 });

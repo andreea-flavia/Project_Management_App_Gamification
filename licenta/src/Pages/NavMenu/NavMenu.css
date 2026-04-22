@@ -4,7 +4,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(238, 241, 241, 0.5);
+    background: rgb(255, 255, 255);
     opacity: 0.9;
     display: flex;
     justify-content: center;
@@ -40,6 +40,7 @@
     cursor: pointer;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
     transition: transform 0.2s ease, border-color 0.2s ease;
+    background: #f0fbef;
 }
 
 

@@ -5,7 +5,7 @@ const HomePage =() => {
     const [user, setUser] = useState("Guest");
 
     useEffect(() => {
-        const savedName = localStorage.getItem("user_name");
+        const savedName = localStorage.getItem("user_first_name");
         if (savedName) {
             setUser(savedName);
         }

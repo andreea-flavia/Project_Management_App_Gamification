@@ -4,7 +4,7 @@ import Users from '../entities/Users.js';
 async function createUser(user) {
     try{
         if(!user.picture_url){
-            const default_picture = "Resurse\Flavia_Stickman.png";
+            const default_picture = "/Flavia_Stickman.png";
             user.picture_url = default_picture;
         }
 
