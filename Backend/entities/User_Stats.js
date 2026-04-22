@@ -26,7 +26,12 @@ const User_Stats = db.define('User_Stats', {
         allowNull: false,
         defaultValue: 1
     },
-    w_coin:{
+    w_coins:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    total_xp_points:{
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0

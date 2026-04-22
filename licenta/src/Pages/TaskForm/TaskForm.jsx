@@ -18,6 +18,8 @@ const TaskForm = () => {
 
     // const [initialStatus, setInitialStatus] = useState();
     
+    //NOTITA VIRTUALA: fac o ruta in router, daca statusul e completed, i se atribuie xp userului (al carui id il pot lua din localStorage) si se verifica daca a depasit xp ul maxim pe nivelul respectiv cu formula 100 * nivel^2,
+    // daca da, se incrementeaza nivelul si se reseteaza xp ul curent la 0, iar xp ul total se pastreaza (pentru statistici), daca taskul e marcat ca completed, nu mai poate fi editat
 
     useEffect (() => {
         const fetchData = async() => {
@@ -112,7 +114,7 @@ const TaskForm = () => {
                     <Link className='btn_back' to={`/tasks`}>
                         {'<<'} Back
                     </Link>
-                    <button className='btn_commit'  onClick={handleSave}>  {/*to={`/tasks`}*/}
+                    <button className='btn_commit'  onClick={handleSave} disabled={isLocked}>  {/*to={`/tasks`}*/}
                         Commit Changes {'>>'} 
                     </button>
                 </div>
@@ -201,6 +203,7 @@ const TaskForm = () => {
                                 value={task.status || ''}
                                 name="status"
                                 onChange={handleChange}
+                                disabled={isLocked}
                             >
                                 <option value="" disabled>Select status</option>
                                 {statusOptions.map(op => (

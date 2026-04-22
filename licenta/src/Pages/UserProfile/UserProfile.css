@@ -158,6 +158,17 @@
     letter-spacing: -1px;
 }
 
+.coin_number {
+    font-family: var(--font-headline);
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--on-surface);
+    display: block;
+    line-height: 1;
+    margin-bottom: 5px;
+    letter-spacing: -1px;
+}
+
 .current_xp {
     color: var(--primary); 
     

@@ -10,6 +10,8 @@ const UserProfile =() => {
     const user_id = localStorage.getItem("user_id");
     
     const [user, setUser] = useState(null);
+    const [stats, setStats] = useState(null);
+    // const [maxXP, setMaxXP] = useState(0);
 
     useEffect(() => {
         const savedName = localStorage.getItem("user_first_name");
@@ -23,7 +25,11 @@ const UserProfile =() => {
             try{
                 const response = await api.get(`/user/${user_id}`);
                 setUser(response.data);
-                console.log("User data:", response.data);
+                // console.log("User data:", response.data);
+
+                const r = await api.get(`/user_stats/${user_id}`);
+                setStats(r.data);
+                console.log("User stats:", r.data);
             } catch(e){
                 console.error("Eroare la preluarea datelor utilizatorului:", e);
             }
@@ -31,6 +37,10 @@ const UserProfile =() => {
         fetchUser();
         
     }, [user_id]);
+
+    const calcMaxXP = (nivel) => {
+        return 100 * (nivel ** 2);
+    }
 
     // {user?.xp_points}
 
@@ -61,13 +71,13 @@ const UserProfile =() => {
                                 </div>
                             )}
                         </div> 
-                        <span className="lvl_number">LVL {user?.level}</span>
+                        <span className="lvl_number">LVL {stats?.level}</span>
                         <div className='xp_section'>
-                            <span className="current_xp">{user?.xp_points?.toLocaleString()}</span>
+                            <span className="current_xp">{stats?.xp_points?.toLocaleString()}</span>
                             <span className="divider"> / </span>
-                            <span className="total_xp">2,000 XP</span>
+                            <span className="total_xp">{calcMaxXP(stats?.level)?.toLocaleString()} XP</span>
                         </div>
-                        
+                        <span className="coin_number">{stats?.w_coins?.toLocaleString()} coins</span>
                     </div>
                     <div className="sec_2">2</div>
                     <div className="sec_3">3</div>

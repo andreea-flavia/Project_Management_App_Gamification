@@ -13,6 +13,7 @@ async function updateUserStats(user_id, statsData) {
     if (!userStats) {
         return null;
     }
+    return await userStats.update(statsData);
 }
 
 async function deleteUserStats(user_id) {
@@ -20,6 +21,8 @@ async function deleteUserStats(user_id) {
     if (!userStats) {
         return null;
     }
+    
+    return await userStats.destroy();
 }
 
 export {
