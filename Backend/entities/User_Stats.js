@@ -35,6 +35,11 @@ const User_Stats = db.define('User_Stats', {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
+    },
+    xp_points_req: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 100
     }
 },{
     timestamps: true

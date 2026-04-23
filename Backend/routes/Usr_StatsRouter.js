@@ -3,7 +3,9 @@ import {
     createUserStats,
     getUserStatsByUserId,
     updateUserStats,
-    deleteUserStats
+    deleteUserStats,
+    addXP_checkLevel,
+    resertUserStats
 } from '../dataAccess/User_StatsDA.js';
 
 let user_statsRouter = express.Router();
@@ -35,7 +37,23 @@ user_statsRouter.route('/user_stats/:user_id')
         const deleted = await deleteUserStats(req.params.stats_id);
         if(deleted) return res.json(deleted);
         return res.status(404).json({error: 'User stats not found'});
+    })
+    .patch(async(req, res) => {  //modifica doar campurile pe care i le trimit
+        const { xp, w_coins } = req.body;
+        const result = await addXP_checkLevel(req.params.user_id, xp, w_coins);
+        if(result) return res.json(result);
+        return res.status(404).json({error: 'User stats not found'});
     });
 
+user_statsRouter.route('/reset_user_stats/:user_id')
+    .post(async (req, res) => {
+        try {
+            const resetStats = await resertUserStats(req.params.user_id);
+            if (resetStats) return res.json(resetStats);
+            return res.status(404).json({ error: 'User stats not found' });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    });
 
 export default user_statsRouter;

@@ -10,6 +10,7 @@
 .action_buttons {
     display: inline-flex;
     gap: 20px;
+    align-items: center;
 }
 
 .btn_back {
@@ -54,6 +55,18 @@
     transform: translateY(-8px);
 }
 
+
+.task_error_text{
+    font-family: var(--font-mono);
+    font-size:15px; 
+    color: var(--secondary);
+    background: rgba(255, 0, 127, 0.05); 
+    border-radius: 4px; 
+    border: 1px solid rgba(255, 0, 127, 0.2);
+    padding: 5px 10px;
+}
+
+
 .header_section {
     justify-content: space-between;
     border-bottom: 1px solid rgba(218, 192, 201, 0.1);
@@ -92,6 +105,14 @@
     color: var(--on-surface-variant);
     font-weight: 500;
 }
+
+.label_task_completed{
+    font-family: var(--font-mono);
+    font-size: 20px;
+    color: var(--secondary);
+    font-weight: 700;
+}
+
 
 
 /* --------------- */
