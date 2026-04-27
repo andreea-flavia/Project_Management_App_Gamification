@@ -4,8 +4,8 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgb(255, 255, 255);
-    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.1);
+    /* opacity: 90%; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,7 +14,7 @@
     transition: all 0.3s ease;
 }
 
-.menu_container{
+.menu_container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,7 +48,7 @@
     border-color: var(--primary);
     transform: translateY(-5px);
     background: var(--primary);
-    
+
 }
 
 .menu_icon {
@@ -67,7 +67,7 @@
     text-align: center;
 }
 
-.menu_card:hover .menu_label  {
+.menu_card:hover .menu_label {
     color: var(--on-surface-variant);
 }
 
@@ -76,7 +76,8 @@
 }
 
 
-.close_btn, .logout_btn {
+.close_btn,
+.logout_btn {
     margin-top: 0;
     background: transparent;
     border: 1px solid var(--secondary);
@@ -89,7 +90,8 @@
     transition: 0.3s;
 }
 
-.close_btn:hover, .logout_btn:hover {
+.close_btn:hover,
+.logout_btn:hover {
     background: var(--secondary);
     border-color: var(--secondary);
     color: var(--on-surface-variant);
@@ -103,4 +105,3 @@
     justify-content: center;
     width: 100%;
 }
-

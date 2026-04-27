@@ -63,12 +63,12 @@ usersRouter.route('/login')
             const user = await getUserByEmail(email);
 
             if(!user){
-                return res.status(404).json({error: 'Utilizatorul nu exista!'});
+                return res.status(404).json({error: 'User doesn\'t exist!'});
             }
 
             const passwordMatch = await bcrypt.compare(password, user.user_password_hash);
             if(!passwordMatch){
-                return res.status(401).json({error: 'Parola incorecta!'});
+                return res.status(401).json({error: 'Incorrect password!'});
             }
 
             const token = jwt.sign({
@@ -91,7 +91,7 @@ usersRouter.route('/login')
                 function: user.function
             }});
         } catch(e){
-            return res.status(500).json({error: e+ ' Eroare de server'});
+            return res.status(500).json({error: e+ ' Server error'});
         }
     });
 
@@ -100,5 +100,18 @@ usersRouter.route('/login')
     //         error: err.message,   
     //         details: err.original?.sqlMessage || err.name 
     //     });
+
+//ruta logout
+usersRouter.route('/logout')
+    .post((req,res) => {
+        try{
+            return res.status(200).json({
+                message: 'Logout succesful!',
+                succes: true
+            });
+        } catch(e){
+            return res.status(500).json({error: e+ ' Server error'});
+        }
+    })
 
 export default usersRouter;

@@ -26,6 +26,8 @@ const NavMenu = ({isOpen, onClose}) => {
 
     const handleLogout = () => {
         //sa nu uit sa fac clear session , token
+        localStorage.removeItem('user_token');
+        localStorage.removeItem('user_id');
         navigate('/login');
         onClose();
     }

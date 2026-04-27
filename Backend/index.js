@@ -4,6 +4,8 @@ import cors from 'cors';
 
 env.config();
 
+import { verifToken } from './Middleware/auth.js';
+
 import DB_init from './entities/DB_init.js';
 import createDBRouter from './routes/createDBRouter.js';
 import usersRouter from './routes/usersRouter.js';
@@ -16,15 +18,18 @@ import userStats from './routes/Usr_StatsRouter.js';
 
 // Backend\entities\User_Stats.js
 const app = express();
-app.use(cors()); 
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('../Frontend/licenta/public'));
 
 DB_init();
 
 app.use('/api', createDBRouter); //request Postman GET http://localhost:9000/api/create
 app.use('/api', usersRouter);
+
+app.use('/api', verifToken);
+
 app.use('/api', tasksRouter);
 app.use('/api', nomStatusRouter);
 app.use('/api', nomPriorityRouter);
