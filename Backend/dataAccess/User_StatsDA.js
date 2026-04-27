@@ -42,7 +42,8 @@ async function addXP_checkLevel(user_id, xp, w_coins){
     while(userStats.xp_points >= userStats.xp_points_req){
         userStats.level += 1;
         userStats.xp_points = userStats.xp_points - userStats.xp_points_req;
-        userStats.xp_points_req = 100 * (userStats.level ** 2);
+        // Formula pentru nivelul următor: 100 * (level următor)^2
+        userStats.xp_points_req = 100 * ((userStats.level + 1) ** 2);
         lvlUp = true;
     }
 
@@ -69,7 +70,7 @@ async function resertUserStats(user_id) {
     userStats.level = 1;
     userStats.w_coins = 0;
     userStats.total_xp_points = 0;
-    userStats.xp_points_req = 100;
+    userStats.xp_points_req = 400;  // Formula: 100 * ((1 + 1)^2) = 400
     await userStats.save();
     return userStats;
 }

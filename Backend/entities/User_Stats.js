@@ -39,7 +39,7 @@ const User_Stats = db.define('User_Stats', {
     xp_points_req: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 100
+        defaultValue: 400  // Formula: 100 * ((level + 1)^2) = 100 * (2^2) = 400 pentru level 1
     }
 },{
     timestamps: true

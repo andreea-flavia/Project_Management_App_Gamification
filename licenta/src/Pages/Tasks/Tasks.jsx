@@ -125,6 +125,21 @@ const Tasks =() => {
         navigate(`/tasks/edit/${taskId}`);
     }
 
+    const completeTask = async (task_id) => {
+        const confirm = window.confirm('Mark this task as completed? You will receive XP and potentially level up.');
+        if(!confirm) return;
+
+        try {
+            const resp = await api.patch(`/task/${task_id}`);
+            const updatedTask = resp.data;
+            setTasks(prevTasks => prevTasks.map(t => t.task_id === task_id ? updatedTask : t));
+            alert('Task completed! XP added to your profile.');
+        } catch (e) {
+            console.error('Error completing task:', e);
+            alert('Failed to complete task');
+        }
+    }
+
     if(loading) {
         return <div>Loading...</div>;
     }
@@ -295,6 +310,17 @@ const Tasks =() => {
                                 </div> */}
                                 <div className='status_text'>
                                     <p className='val'>{task.xp_points} XP</p>
+                                </div>
+
+                                <div className='status_text'>
+                                    {task.status !== 4 && (
+                                        <button onClick={(e) => {
+                                            e.stopPropagation();
+                                            completeTask(task.task_id);
+                                        }}
+                                        className='btn_mark_comp'>Mark Completed</button>
+                                    )}
+                                    
                                 </div>
                             </div>
                         </div>

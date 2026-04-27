@@ -7,7 +7,14 @@ import { Link } from 'react-router-dom';
 
 const TaskForm = () => {
     // const navigate = useNavigate();
-    const [task, setTask] = useState({ task_title: '', task_description: '', status: '', priority: '', tags: [] });
+    const [task, setTask] = useState({ 
+        task_title: '', 
+        task_description: '', 
+        status: '', 
+        priority: '', 
+        tags: [],
+        xp_points: 0  // Inițializare XP points
+    });
     // const [loading] = useState(true);
     const { id } = useParams();
     // const navigate = useNavigate();
@@ -53,8 +60,8 @@ const TaskForm = () => {
             const { name, value } = e.target;
             setTask(prev => ({
                 ...prev,
-                [name]: name === 'status' || name === 'priority'
-                    ? (value ? parseInt(value, 10) : '')
+                [name]: name === 'status' || name === 'priority' || name === 'xp_points'
+                    ? (value ? parseInt(value, 10) : (name === 'xp_points' ? 0 : ''))
                     : value
             }));
         } catch (e) {
@@ -79,7 +86,8 @@ const TaskForm = () => {
             return;
         }
 
-        if(!task.xp_points || task.xp_points < 0){
+        // Validare XP: trebuie să fie număr și >= 0 (0 este valid!)
+        if(task.xp_points === null || task.xp_points === undefined || isNaN(task.xp_points) || task.xp_points < 0){
             setError("Error: Invalid XP points!");
             return;
         }

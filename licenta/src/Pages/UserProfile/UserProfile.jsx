@@ -80,8 +80,27 @@ const UserProfile =() => {
 
                 {/* xp points */}
                 <div className="acc_s2">
-                    <div className="s2_column">W Coins: {stats?.w_coins?.toLocaleString()}</div>
-                    <div className="s2_column">Tasks Completed: </div>
+                    <div className="s2_coin_section">
+                        {/* W Coins: {stats?.w_coins?.toLocaleString()} */}
+                        <div>
+                            <p className='acc_bento_label'>W Coins</p>
+                            <div className='coin_display'>
+                                <h3 className="s2_bento_value_large">{stats?.w_coins || 0}</h3>
+                                <span className="material-symbols-outlined icon_primary">toll</span>
+                            </div>
+                        </div>
+                        <button className='s2_btn_redeem'>
+                            REDEEM
+                        </button>
+                    </div>
+                    {/* <div className="s2_column">Tasks Completed: </div> */}
+                    <div className="s2_tasks_total_section">
+                        <p className="s2_bento_label">TOTAL_TASKS_COMPLETED</p>
+                        <h3 className="s2_bento_value_large">{stats?.total_tasks || '742'}</h3>
+                        <div className="s2_percentile_wrapper">
+                            <p className="s2_percentile_text">Network percentile: 95th</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="acc_s3">3</div>

@@ -6,7 +6,8 @@ import {
     getTaskById,
     updateTask,
     deleteTask,
-    getTasksByUserId
+    getTasksByUserId,
+    markCompleted
 } from '../dataAccess/TaskDA.js';
 
 let tasksRouter = express.Router();
@@ -41,6 +42,12 @@ tasksRouter.route('/task/:id')
         task_del = await deleteTask(req.params.id);
         if(task_del)
             return res.json(task_del);
+        return res.status(404).json({error: 'Task not found'});
+    })
+    .patch( async(req,res) => {
+        const task = await markCompleted(req.params.id);
+        if(task)
+            return res.json(task);
         return res.status(404).json({error: 'Task not found'});
     });
 
