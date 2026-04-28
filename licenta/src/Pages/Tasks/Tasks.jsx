@@ -1,9 +1,10 @@
 import './Tasks.css';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../../api.js';
 import { Link, useNavigate } from 'react-router-dom';
+import { ROLES } from '../../constants/roles.js';
 
-const Tasks =() => {
+const Tasks = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sMap, setSMap] = useState({});
@@ -16,21 +17,24 @@ const Tasks =() => {
     const [selectedTags, setSelectedTags] = useState([]);
     const [searchText, setSearchText] = useState('');
     const [showFilters, setShowFilters] = useState(false);
-    const [sortOrder, setSortOrder] = useState('deadline_asc');
+    const [sortOrder, setSortOrder] = useState('task_id_desc');
 
     const navigate = useNavigate();
 
+    const userRole = localStorage.getItem('user_role');
 
-    useEffect( () => {
+
+    useEffect(() => {
         const fetch = async () => {
-            try{
+            try {
                 const userId = localStorage.getItem('user_id');
                 if (!userId) {
                     console.error('No user ID found');
                     setLoading(false);
                     return;
                 }
-                const r = await api.get(`/tasks/user/${userId}`);
+                // const r = await api.get(`/tasks/user/${userId}`);
+                const r = await api.get(`/task`);
                 setTasks(r.data);
 
                 const statusR = await api.get('/statuses');
@@ -60,7 +64,7 @@ const Tasks =() => {
                 setPColorMap(pColorMap);
 
                 setLoading(false);
-            } catch(e) {
+            } catch (e) {
                 console.error('Error fetching tasks:', e);
                 setLoading(false);
             }
@@ -69,7 +73,7 @@ const Tasks =() => {
     }, []);
 
     const formatareData = (date) => {
-        if(!date) return 'No Deadline Specified';
+        if (!date) return 'No Deadline Specified';
         const d = new Date(date);
         return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d);
     };
@@ -117,7 +121,12 @@ const Tasks =() => {
         sortedTasks.sort((a, b) => a.xp_points - b.xp_points);
     } else if (sortOrder === 'xp_desc') {
         sortedTasks.sort((a, b) => b.xp_points - a.xp_points);
+    } else if (sortOrder === 'task_id_asc') {
+        sortedTasks.sort((a, b) => a.task_id - b.task_id);
+    } else if (sortOrder === 'task_id_desc') {
+        sortedTasks.sort((a, b) => b.task_id - a.task_id);
     }
+    //task_id_asc
 
 
     const handleOnTaskClick = (taskId) => {
@@ -127,7 +136,7 @@ const Tasks =() => {
 
     const completeTask = async (task_id) => {
         const confirm = window.confirm('Mark this task as completed? You will receive XP and potentially level up.');
-        if(!confirm) return;
+        if (!confirm) return;
 
         try {
             const resp = await api.patch(`/task/${task_id}`);
@@ -140,10 +149,10 @@ const Tasks =() => {
         }
     }
 
-    if(loading) {
+    if (loading) {
         return <div>Loading...</div>;
     }
-    
+
     return (
         <div className='tasks_main'>
             <section className="title_section">
@@ -153,16 +162,17 @@ const Tasks =() => {
                     <span>SYSTEM ACTIVE OPERATIONS</span>
                 </div>
             </section>
-            
+
             <section className="metrics_section">
                 {/* DE COMPLETAT LATER */}
             </section>
 
             <section className='actiuni'>
-                <Link className='btn_add_task'  to={`/tasks/new`}>
-                    <span className="material-symbols-outlined">add</span>
-                    <span className='btn_text'>New Task</span>
-                </Link>
+                {(userRole === ROLES.ADMIN || userRole === ROLES.MANAGER) && (
+                    <Link className='btn_add_task' to={`/tasks/new`}>
+                        <span className="material-symbols-outlined">add</span>
+                        <span className='btn_text'>New Task</span>
+                    </Link>)}
 
                 <button type='button' className='filter_toggle' onClick={() => setShowFilters(prev => !prev)}>
                     {showFilters ? 'Hide filters' : 'Show filters'}
@@ -178,6 +188,8 @@ const Tasks =() => {
                     <option value='deadline_desc'>Deadline Desc</option>
                     <option value='xp_asc'>XP Asc</option>
                     <option value='xp_desc'>XP Desc</option>
+                    <option value='task_id_asc'>ID Asc</option>
+                    <option value='task_id_desc'>ID Desc</option>
                 </select>
 
                 <input
@@ -189,93 +201,93 @@ const Tasks =() => {
                 />
             </section>
 
-            
+
 
             {showFilters && (
                 <section className="filters_section">
-                <div className="filter_group">
-                    <span className='filter_label'>Status</span>
-                    <button
-                        type='button'
-                        className={`filter_btn ${selectedStatus === '' ? 'active' : ''}`}
-                        onClick={() => setSelectedStatus('')}
-                    >
-                        All
-                    </button>
-                    {Object.entries(sMap).map(([id, name]) => (
+                    <div className="filter_group">
+                        <span className='filter_label'>Status</span>
                         <button
-                            key={id}
                             type='button'
-                            className={`filter_btn ${selectedStatus === id ? 'active' : ''}`}
-                            onClick={() => setSelectedStatus(id)}
+                            className={`filter_btn ${selectedStatus === '' ? 'active' : ''}`}
+                            onClick={() => setSelectedStatus('')}
                         >
-                            {name}
+                            All
                         </button>
-                    ))}
-                </div>
-                <div className="filter_group">
-                    <span className='filter_label'>Priority</span>
-                    <button
-                        type='button'
-                        className={`filter_btn ${selectedPriority === '' ? 'active' : ''}`}
-                        onClick={() => setSelectedPriority('')}
-                    >
-                        All
-                    </button>
-                    {Object.entries(pMap).map(([id, name]) => (
-                        <button
-                            key={id}
-                            type='button'
-                            className={`filter_btn ${selectedPriority === id ? 'active' : ''}`}
-                            onClick={() => setSelectedPriority(id)}
-                        >
-                            {name}
-                        </button>
-                    ))}
-                </div>
-                <div className="filter_group">
-                    <span className='filter_label'>Tag</span>
-                    <button
-                        type='button'
-                        className={`filter_btn ${selectedTags.length === 0 ? 'active' : ''}`}
-                        onClick={() => setSelectedTags([])}
-                    >
-                        All
-                    </button>
-                    {tagOptions.map(tag => {
-                        const tagId = tag.tag_id;
-                        const active = selectedTags.includes(tagId);
-                        return (
+                        {Object.entries(sMap).map(([id, name]) => (
                             <button
-                                key={tagId}
+                                key={id}
                                 type='button'
-                                className={`filter_btn ${active ? 'active' : ''}`}
-                                onClick={() => {
-                                    setSelectedTags(prev =>
-                                        prev.includes(tagId)
-                                            ? prev.filter(id => id !== tagId)
-                                            : [...prev, tagId]
-                                    );
-                                }}
+                                className={`filter_btn ${selectedStatus === id ? 'active' : ''}`}
+                                onClick={() => setSelectedStatus(id)}
                             >
-                                {tag.tag_name}
+                                {name}
                             </button>
-                        );
-                    })}
-                </div>
-                <button type='button' className='filter_clear' onClick={() => {
-                    setSelectedStatus('');
-                    setSelectedPriority('');
-                    setSelectedTags([]);
-                }}>
-                    Clear filters
-                </button>
-            </section>
+                        ))}
+                    </div>
+                    <div className="filter_group">
+                        <span className='filter_label'>Priority</span>
+                        <button
+                            type='button'
+                            className={`filter_btn ${selectedPriority === '' ? 'active' : ''}`}
+                            onClick={() => setSelectedPriority('')}
+                        >
+                            All
+                        </button>
+                        {Object.entries(pMap).map(([id, name]) => (
+                            <button
+                                key={id}
+                                type='button'
+                                className={`filter_btn ${selectedPriority === id ? 'active' : ''}`}
+                                onClick={() => setSelectedPriority(id)}
+                            >
+                                {name}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="filter_group">
+                        <span className='filter_label'>Tag</span>
+                        <button
+                            type='button'
+                            className={`filter_btn ${selectedTags.length === 0 ? 'active' : ''}`}
+                            onClick={() => setSelectedTags([])}
+                        >
+                            All
+                        </button>
+                        {tagOptions.map(tag => {
+                            const tagId = tag.tag_id;
+                            const active = selectedTags.includes(tagId);
+                            return (
+                                <button
+                                    key={tagId}
+                                    type='button'
+                                    className={`filter_btn ${active ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setSelectedTags(prev =>
+                                            prev.includes(tagId)
+                                                ? prev.filter(id => id !== tagId)
+                                                : [...prev, tagId]
+                                        );
+                                    }}
+                                >
+                                    {tag.tag_name}
+                                </button>
+                            );
+                        })}
+                    </div>
+                    <button type='button' className='filter_clear' onClick={() => {
+                        setSelectedStatus('');
+                        setSelectedPriority('');
+                        setSelectedTags([]);
+                    }}>
+                        Clear filters
+                    </button>
+                </section>
             )}
 
             <section className="tasks_section">
                 {sortedTasks.length > 0 ? (
-                    sortedTasks.map( (task) => (
+                    sortedTasks.map((task) => (
                         <div key={task.task_id} className='task_row' onClick={() => handleOnTaskClick(task.task_id)}>
                             <div className='task_info'>
                                 <h4>#{task.task_id} {task.task_title}</h4>
@@ -299,9 +311,9 @@ const Tasks =() => {
                                     <p className="label">Priority</p>
                                     <div className="tag" style={{ backgroundColor: pColorMap[task.priority] || '#7a7878' }}>
                                         {pMap[task.priority] || task.priority}
-                                    </div> 
+                                    </div>
                                 </div>
-                                
+
                                 {/* <div className="status_text">
                                     <p className="label">Priority</p>
                                     <p className='val' style={{ color: pColorMap[task.priority] || '#7a7878' }}>
@@ -318,9 +330,9 @@ const Tasks =() => {
                                             e.stopPropagation();
                                             completeTask(task.task_id);
                                         }}
-                                        className='btn_mark_comp'>Mark Completed</button>
+                                            className='btn_mark_comp'>Mark Completed</button>
                                     )}
-                                    
+
                                 </div>
                             </div>
                         </div>

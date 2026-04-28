@@ -1,4 +1,8 @@
+import verifyRole from '../Middleware/verifyRole.js';
 import express from 'express';
+import { ROLES } from '../constants/roles.js';
+
+//Backend\Constants\roles.js
 
 import {
     createTask,
@@ -14,7 +18,7 @@ import {
 let tasksRouter = express.Router();
 
 tasksRouter.route('/task')
-    .post(async (req, res) => {
+    .post(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
         try {
             const new_task = await createTask(req.body);
             return res.status(201).json(new_task);
@@ -23,7 +27,26 @@ tasksRouter.route('/task')
         }
     })
     .get(async (req, res) => {
-        return res.json(await getTasks());
+        //Admin / Manager vad toate taskurile
+        // Standard le vede doar pe ale lui
+        try {
+            if (req.user.role === ROLES.ADMIN || req.user.role === ROLES.MANAGER) {
+                const allTasks = await getTasks();
+                return res.json(allTasks);
+            }
+            if (req.user.role === ROLES.STANDARD) {
+                console.log("A intrat in STANDARD!");
+                const userTasks = await getTasksByUserId(req.user.userId);
+                console.log("Task uri gasite:", userTasks.length);
+                return res.json(userTasks);
+            }
+        } catch (err) {
+            console.error("==== EROARE SQL / BACKEND ====");
+            console.error(err);
+            return res.status(500).json({ error: 'Error getting tasks' });
+        }
+
+        // return res.json(await getTasks());
     });
 
 tasksRouter.route('/task/:id')
@@ -39,8 +62,8 @@ tasksRouter.route('/task/:id')
             return res.json(task_upd);
         return res.status(404).json({ error: 'Task not found' });
     })
-    .delete(async (req, res) => {
-        task_del = await deleteTask(req.params.id);
+    .delete(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
+        const task_del = await deleteTask(req.params.id);
         if (task_del)
             return res.json(task_del);
         return res.status(404).json({ error: 'Task not found' });

@@ -38,9 +38,10 @@ const Users = db.define('Users', {
         type: Sequelize.STRING,
         allowNull: true
     },
-    role_id:{       //denumires rolului (manager, angajat, administrator)
-        type: Sequelize.INTEGER,
-        allowNull: false
+    role:{       //denumirea rolului (Admin, Manager, Standard)
+        type: Sequelize.ENUM('Admin', 'Manager', 'Standard'),
+        allowNull: false,
+        defaultValue: 'Standard'
     },
     function:{     //denumirea postului ocupat de utilizator
         type: Sequelize.STRING,

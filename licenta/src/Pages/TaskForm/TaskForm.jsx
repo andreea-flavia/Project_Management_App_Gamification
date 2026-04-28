@@ -2,16 +2,17 @@ import './TaskForm.css';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import api from '../../api.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ROLES } from '../../constants/roles.js';
 
 
 const TaskForm = () => {
-    // const navigate = useNavigate();
-    const [task, setTask] = useState({ 
-        task_title: '', 
-        task_description: '', 
-        status: '', 
-        priority: '', 
+    const navigate = useNavigate();
+    const [task, setTask] = useState({
+        task_title: '',
+        task_description: '',
+        status: '',
+        priority: '',
         tags: [],
         xp_points: 0  // Inițializare XP points
     });
@@ -25,13 +26,15 @@ const TaskForm = () => {
 
     const [initialStatus, setInitialStatus] = useState();
     const [error, setError] = useState('');
-    
+
+    const userRole = localStorage.getItem('user_role');
+
     //NOTITA VIRTUALA: fac o ruta in router, daca statusul e completed, i se atribuie xp userului (al carui id il pot lua din localStorage) si se verifica daca a depasit xp ul maxim pe nivelul respectiv cu formula 100 * nivel^2,
     // daca da, se incrementeaza nivelul si se reseteaza xp ul curent la 0, iar xp ul total se pastreaza (pentru statistici), daca taskul e marcat ca completed, nu mai poate fi editat
 
-    useEffect (() => {
-        const fetchData = async() => {
-            try{
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
                 if (id) {
                     const r = await api.get(`/task/${id}`);
                     setTask(r.data);
@@ -48,7 +51,7 @@ const TaskForm = () => {
                 setStatusOptions(statusRes.data);
                 setPriorityOptions(priorityRes.data);
                 setAllTags(tagsRes.data);
-            } catch(e){
+            } catch (e) {
                 console.error('Error fetching task data:', e);
             }
         }
@@ -80,28 +83,26 @@ const TaskForm = () => {
             setError("Error: Complete all fields!");
             return;
         }
-
-        if(task.end_date && task.start_date && new Date(task.end_date) < new Date(task.start_date)){
+        if (task.end_date && task.start_date && new Date(task.end_date) < new Date(task.start_date)) {
             setError("Error: The deadline cannot be before the start date!");
             return;
         }
-
         // Validare XP: trebuie să fie număr și >= 0 (0 este valid!)
-        if(task.xp_points === null || task.xp_points === undefined || isNaN(task.xp_points) || task.xp_points < 0){
+        if (task.xp_points === null || task.xp_points === undefined || isNaN(task.xp_points) || task.xp_points < 0) {
             setError("Error: Invalid XP points!");
             return;
         }
 
-        var mesaj_status= "";
-        if(task.status === 4){
-            mesaj_status =  'Mark this task as completed?';
+        var mesaj_status = "";
+        if (task.status === 4) {
+            mesaj_status = 'Mark this task as completed?';
         }
         else {
             mesaj_status = 'Save changes to this task?';
         }
         const confirm_panel = window.confirm(mesaj_status);
         // console.log(initialStatus, ',' , task.status);
-        if(confirm_panel){
+        if (confirm_panel) {
             try {
 
                 if (id) {
@@ -109,13 +110,15 @@ const TaskForm = () => {
                     await api.put(`/task/${id}`, task);
                     alert('Task updated successfully!');
 
+                    setInitialStatus(task.status);
+
                     //adaug xp la user
-                    if(task.status === 4 && initialStatus !== 4){  //daca statusul a fost schimbat la completed, atunci adaug xp, altfel nu
+                    if (task.status === 4 && initialStatus !== 4) {  //daca statusul a fost schimbat la completed, atunci adaug xp, altfel nu
                         const r = await api.patch(`/user_stats/${user_id}`, {
                             xp: task.xp_points || 0,
                             w_coins: task.xp_points ? Math.floor(task.xp_points / 10) : 0  // coins = nr xp / 10
                         });
-                        
+
 
                         console.log('XP update result:', r.data);
                     }
@@ -125,7 +128,7 @@ const TaskForm = () => {
                     alert('Task created successfully!');
                 }
                 // navigate('/tasks');
-                
+
             } catch (e) {
                 console.error('Error saving task:', e);
                 alert('Unable to save task.');
@@ -133,7 +136,31 @@ const TaskForm = () => {
                 setError(m);
             }
         }
-       
+
+    };
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        const isConfirmed = window.confirm("Are you sure you want to delete this task? This action cannot be undone.");
+        if (isConfirmed) {
+            try {
+                if (id) {
+                    await api.delete(`/task/${id}`);
+                    alert('Task deleted successfully!');
+                    navigate('/tasks');
+                }
+                else {
+                    navigate('/tasks');
+                }
+            } catch (error) {
+                console.error('Error deleting task:', error);
+                if (error.response?.status === 403) {
+                    alert("You don't have permission to delete tasks.");
+                } else {
+                    alert('Unable to delete task.');
+                }
+            }
+        }
     };
 
     const handleTagToggle = (tagId) => {
@@ -158,12 +185,18 @@ const TaskForm = () => {
                     <Link className='btn_back' to={`/tasks`}>
                         {'<<'} Back
                     </Link>
-                    {initialStatus !== 4 &&(
-                        <button className='btn_commit'  onClick={handleSave} >  {/*to={`/tasks`}*/}
-                            Commit Changes {'>>'} 
-                        </button>
+                    {initialStatus !== 4 && (
+                        <div>
+                            {/* <button className='btn_delete_task' onClick={handleDelete}>
+                                Delete task
+                            </button> */}
+
+                            <button className='btn_commit' onClick={handleSave} >  {/*to={`/tasks`}*/}
+                                Commit Changes {'>>'}
+                            </button>
+                        </div>
                     )}
-                    {initialStatus === 4 &&(
+                    {initialStatus === 4 && (
                         <div className='label_task_completed'> {'<<'} Task already completed {'>>'} </div>
                     )}
 
@@ -179,7 +212,7 @@ const TaskForm = () => {
                 </div>
 
                 <div className='form_section'>
-                    <div className='section_1'>  
+                    <div className='section_1'>
                         {/* Task title & description */}
                         <div className='s1_section'>
                             <label className="section_label">Task Name</label>
@@ -189,12 +222,12 @@ const TaskForm = () => {
                                 onChange={handleChange}
                                 className='s1_input'
                                 disabled={isCompleted}
-                            />  
+                            />
                         </div>
 
-                        <div className='s1_section'>    
+                        <div className='s1_section'>
                             <   label className="section_label">Task Description</label>
-                            <textarea 
+                            <textarea
                                 name="task_description"
                                 value={task.task_description || ''}
                                 onChange={handleChange}
@@ -202,7 +235,7 @@ const TaskForm = () => {
                                 rows="10"
                                 disabled={isCompleted}
                             />
-                        </div>                      
+                        </div>
 
                     </div>
 
@@ -218,8 +251,8 @@ const TaskForm = () => {
                                 disabled={isCompleted}
                             />
                         </div>
-                            
-                        
+
+
                         <div className='s1_section'>
                             <label className="section_label">Deadline</label>
                             <input
@@ -233,7 +266,7 @@ const TaskForm = () => {
                     </div>
 
                     <div className='section_3'>
-                         <div className='s1_section'>
+                        <div className='s1_section'>
                             <label className="section_label">Priority</label>
                             <select
                                 className='s1_input'
@@ -247,10 +280,10 @@ const TaskForm = () => {
                                     <option key={op.priority_id} value={op.priority_id}>{op.priority_name}</option>
                                 ))}
                             </select>
-                            
+
                         </div>
-                            
-                        
+
+
                         <div className='s1_section'>
                             <label className="section_label">Status</label>
                             <select
@@ -269,33 +302,33 @@ const TaskForm = () => {
                     </div>
 
                     <div className='section_4'>
-                         <label className="section_label">All tags</label>
-                         <div className='tag_list'>
-                             {allTags.length > 0 ? (
-                                 allTags.map(tag => {
-                                     const selected = selectedTagIds.includes(tag.tag_id);
-                                     return (
-                                         <button
-                                             type='button'
-                                             key={tag.tag_id}
-                                             className={`tag_chip ${selected ? 'active' : ''}`}
+                        <label className="section_label">All tags</label>
+                        <div className='tag_list'>
+                            {allTags.length > 0 ? (
+                                allTags.map(tag => {
+                                    const selected = selectedTagIds.includes(tag.tag_id);
+                                    return (
+                                        <button
+                                            type='button'
+                                            key={tag.tag_id}
+                                            className={`tag_chip ${selected ? 'active' : ''}`}
                                             //  style={{ backgroundColor: tag.color || '#424242' }}
-                                             onClick={() => handleTagToggle(tag.tag_id)}
-                                             disabled={isCompleted}
-                                         >
-                                             {tag.tag_name}
-                                         </button>
-                                     );
-                                 })
-                             ) : (
-                                 <p className='no_tags'>No tags available</p>
-                             )}
-                         </div>
+                                            onClick={() => handleTagToggle(tag.tag_id)}
+                                            disabled={isCompleted}
+                                        >
+                                            {tag.tag_name}
+                                        </button>
+                                    );
+                                })
+                            ) : (
+                                <p className='no_tags'>No tags available</p>
+                            )}
+                        </div>
                     </div>
 
                     <div className='section_5'>
-                         {/* <label className="section_label">XP Points, Assigned to, Teams, Project</label> */}
-                         <div className='section_xp'>
+                        {/* <label className="section_label">XP Points, Assigned to, Teams, Project</label> */}
+                        <div className='section_xp'>
                             <label className="section_label_xp">XP Points</label>
                             <input
                                 type="number"
@@ -319,7 +352,14 @@ const TaskForm = () => {
                             <label className="section_label">Assigned Team</label>
                         </div>
 
-                        
+                        {(userRole === ROLES.ADMIN || userRole === ROLES.MANAGER) && id && (
+                            <div>
+                                <button className='btn_delete_task' onClick={handleDelete}>
+                                    DELETE TASK
+                                </button>
+                            </div>
+                        )}
+
                     </div>
                 </div>
 

@@ -35,6 +35,7 @@ const LoginPage = () => {
                 // localStorage.setItem('user_last_name', r.data.user.last_name);
                 localStorage.setItem('user_id', r.data.user.id);
                 localStorage.setItem('user_token', r.data.token)
+                localStorage.setItem('user_role', r.data.user.role)
                 navigate('/home');
             }
         } catch (e) {
