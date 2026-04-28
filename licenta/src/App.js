@@ -10,28 +10,32 @@ import ProtectedRoute from './Pages/ProtectedRoute.jsx';
 import TaskForm from './Pages/TaskForm';
 import UserProfile from './Pages/UserProfile';
 
+import { ROLES } from './constants/roles';
+
 function App() {
   return (
     <Router>
       <Routes>
         {/* <Route path="/" element={<LoginPage />} />   */}
-        <Route path="/" element={<Navigate to='/login' replace />} /> 
+        <Route path="/" element={<Navigate to='/login' replace />} />
         {/* pentru cand bag token.. dac anu esti auth te baga in login altfel te duce direct in home */}
-        
+
         <Route path="/login" element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>
-            <Route element={<MainLayout />}>
-                  <Route path="/home" element={<HomePage />} />
-                  <Route path="/tasks" element={<Tasks />} />
-                  <Route path="/tasks/new" element={<TaskForm />} />
-                  <Route path="/tasks/edit/:id" element={<TaskForm />} />
-                  <Route path="/profile" element={<UserProfile />} />
+          <Route element={<MainLayout />}>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]} />}>
+              <Route path="/tasks/new" element={<TaskForm />} />
             </Route>
+            <Route path="/tasks/edit/:id" element={<TaskForm />} />
+            <Route path="/profile" element={<UserProfile />} />
+          </Route>
         </Route>
 
-        
-        
+
+
       </Routes>
     </Router>
   );

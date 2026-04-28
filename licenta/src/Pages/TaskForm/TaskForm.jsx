@@ -74,6 +74,7 @@ const TaskForm = () => {
 
     const isCompleted = task.status === 4;
     const user_id = localStorage.getItem("user_id");
+    const isViewOnly = userRole === ROLES.STANDARD && task.assigned_to !== parseInt(user_id);
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -185,7 +186,7 @@ const TaskForm = () => {
                     <Link className='btn_back' to={`/tasks`}>
                         {'<<'} Back
                     </Link>
-                    {initialStatus !== 4 && (
+                    {initialStatus !== 4 && !isViewOnly && (
                         <div>
                             {/* <button className='btn_delete_task' onClick={handleDelete}>
                                 Delete task
@@ -221,7 +222,7 @@ const TaskForm = () => {
                                 value={task.task_title || ''}
                                 onChange={handleChange}
                                 className='s1_input'
-                                disabled={isCompleted}
+                                disabled={isCompleted || isViewOnly}
                             />
                         </div>
 
@@ -233,7 +234,7 @@ const TaskForm = () => {
                                 onChange={handleChange}
                                 className='s1_input'
                                 rows="10"
-                                disabled={isCompleted}
+                                disabled={isCompleted || isViewOnly}
                             />
                         </div>
 
@@ -248,7 +249,7 @@ const TaskForm = () => {
                                 value={task.start_date ? task.start_date.split('T')[0] : ''}
                                 onChange={handleChange}
                                 name="start_date"
-                                disabled={isCompleted}
+                                disabled={isCompleted || isViewOnly}
                             />
                         </div>
 
@@ -273,7 +274,7 @@ const TaskForm = () => {
                                 value={task.priority || ''}
                                 name="priority"
                                 onChange={handleChange}
-                                disabled={isCompleted}
+                                disabled={isCompleted || isViewOnly}
                             >
                                 <option value="" disabled>Select priority</option>
                                 {priorityOptions.map(op => (
@@ -291,7 +292,7 @@ const TaskForm = () => {
                                 value={task.status || ''}
                                 name="status"
                                 onChange={handleChange}
-                                disabled={isCompleted}
+                                disabled={isCompleted || isViewOnly}
                             >
                                 <option value="" disabled>Select status</option>
                                 {statusOptions.map(op => (
@@ -314,7 +315,7 @@ const TaskForm = () => {
                                             className={`tag_chip ${selected ? 'active' : ''}`}
                                             //  style={{ backgroundColor: tag.color || '#424242' }}
                                             onClick={() => handleTagToggle(tag.tag_id)}
-                                            disabled={isCompleted}
+                                            disabled={isCompleted || isViewOnly}
                                         >
                                             {tag.tag_name}
                                         </button>
@@ -336,7 +337,7 @@ const TaskForm = () => {
                                 value={task.xp_points}
                                 onChange={handleChange}
                                 name="xp_points"
-                                disabled={isCompleted}
+                                disabled={isCompleted || isViewOnly}
                             />
                         </div>
 
@@ -366,6 +367,10 @@ const TaskForm = () => {
                 <div className="comments_section">
                     <h2>Comments</h2>
                     <p className='no_comments'>No comments yet.</p>
+                </div>
+                <div className="comments_section">
+                    <h2>Audit Logs</h2>
+                    <p className='no_comments'>No logs yet.</p>
                 </div>
 
             </div>

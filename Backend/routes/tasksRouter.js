@@ -35,9 +35,7 @@ tasksRouter.route('/task')
                 return res.json(allTasks);
             }
             if (req.user.role === ROLES.STANDARD) {
-                console.log("A intrat in STANDARD!");
                 const userTasks = await getTasksByUserId(req.user.userId);
-                console.log("Task uri gasite:", userTasks.length);
                 return res.json(userTasks);
             }
         } catch (err) {
@@ -57,10 +55,23 @@ tasksRouter.route('/task/:id')
         return res.status(404).json({ error: 'Task not found' });
     })
     .put(async (req, res) => {
-        const task_upd = await updateTask(req.params.id, req.body);
-        if (task_upd)
-            return res.json(task_upd);
-        return res.status(404).json({ error: 'Task not found' });
+        try {
+            if (req.user.role === ROLES.STANDARD) {
+                const taskDB = await getTaskById(req.params.id);
+                if (!taskDB)
+                    return res.status(404).json({ error: 'Task not found' });
+                if (taskDB.assigned_to !== req.user.userId) {
+                    return res.status(403).json({ error: 'Forbidden: You cannot edit other users tasks!' });
+                }
+            }
+            const task_upd = await updateTask(req.params.id, req.body);
+            if (task_upd)
+                return res.json(task_upd);
+            return res.status(404).json({ error: 'Task not found' });
+        } catch (error) {
+            console.error("Error in PUT /task/:id :", error);
+            return res.status(500).json({ error: 'Server error during task update' });
+        }
     })
     .delete(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
         const task_del = await deleteTask(req.params.id);

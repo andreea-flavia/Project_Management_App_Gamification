@@ -1,22 +1,22 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import './NavMenu.css';
 
-const NavMenu = ({isOpen, onClose}) => {
+const NavMenu = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
 
-    if(!isOpen) {
+    if (!isOpen) {
         return null;
     }
 
     const items = [
-        {name: 'Home', path:  '/home', icon: 'home'},
-        {name: 'Tasks', path:  '/tasks', icon: 'checklist'},
-        {name: 'Projects', path:  '/projects', icon: 'account_tree'},
-        {name: 'My Team', path:  '/team', icon: 'group'},
-        {name: 'My Progress', path:  '/profile', icon: 'account_circle'},
-        {name: 'Settings', path:  '/settings', icon: 'settings'}
-        
+        { name: 'Home', path: '/home', icon: 'home' },
+        { name: 'Tasks', path: '/tasks', icon: 'checklist' },
+        { name: 'Projects', path: '/projects', icon: 'account_tree' },
+        { name: 'My Team (Leaderboard)', path: '/team', icon: 'group' },
+        { name: 'My Progress', path: '/profile', icon: 'account_circle' },
+        { name: 'Analytics', path: '/analytics', icon: 'insights     ' }
+
     ];
 
     const handleNavigation = (path) => {
@@ -38,9 +38,9 @@ const NavMenu = ({isOpen, onClose}) => {
                 <div className="menu_grid">
                     {items.map((item) => (
                         <div
-                        key={item.name}
-                        className="menu_card"
-                        onClick={() => handleNavigation(item.path)} >
+                            key={item.name}
+                            className="menu_card"
+                            onClick={() => handleNavigation(item.path)} >
                             <span className="material-symbols-outlined menu_icon">{item.icon}</span>
                             <span className="menu_label">{item.name}</span>
                         </div>
@@ -52,7 +52,7 @@ const NavMenu = ({isOpen, onClose}) => {
                         Log Out {'>>'}
                     </button>
                 </div>
-                
+
             </div>
         </div>
     )
