@@ -8,42 +8,42 @@ const Tasks = db.define('Tasks', {
         autoIncrement: true,
         allowNull: false
     },
-    task_title:{
+    task_title: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    task_description:{
+    task_description: {
         type: Sequelize.TEXT,
         allowNull: true
     },
 
-    start_date:{
+    start_date: {
         type: Sequelize.DATE,
         allowNull: false
     },
-    end_date:{
+    end_date: {
         type: Sequelize.DATE,
         allowNull: false
     },
 
-    status:{
+    status: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references:{
+        references: {
             model: 'Nom_Statuses',
             key: 'status_id'
         }
     },
-    priority:{
+    priority: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references:{
+        references: {
             model: 'Nom_Priorities',
             key: 'priority_id'
         }
     },
 
-    assigned_to:{
+    assigned_to: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
@@ -52,7 +52,7 @@ const Tasks = db.define('Tasks', {
         }
     },
 
-    project_id:{
+    project_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
@@ -61,13 +61,19 @@ const Tasks = db.define('Tasks', {
         }
     },
 
-    xp_points:{
+    xp_points: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    version: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
     }
-},{
-    timestamps: true
+}, {
+    timestamps: true,
+    version: true
 });
 
 export default Tasks;

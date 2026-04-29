@@ -88,7 +88,6 @@ const TaskForm = () => {
             setError("Error: The deadline cannot be before the start date!");
             return;
         }
-        // Validare XP: trebuie să fie număr și >= 0 (0 este valid!)
         if (task.xp_points === null || task.xp_points === undefined || isNaN(task.xp_points) || task.xp_points < 0) {
             setError("Error: Invalid XP points!");
             return;
@@ -112,7 +111,6 @@ const TaskForm = () => {
                     alert('Task updated successfully!');
 
                     setInitialStatus(task.status);
-
                     //adaug xp la user
                     if (task.status === 4 && initialStatus !== 4) {  //daca statusul a fost schimbat la completed, atunci adaug xp, altfel nu
                         const r = await api.patch(`/user_stats/${user_id}`, {
@@ -130,11 +128,15 @@ const TaskForm = () => {
                 }
                 // navigate('/tasks');
 
-            } catch (e) {
-                console.error('Error saving task:', e);
-                alert('Unable to save task.');
-                const m = e.response?.data?.error || 'Error occurred while saving the task';
-                setError(m);
+            } catch (error) {
+                console.error('Error saving task:', error);
+                if (error.response?.status === 409) {
+                    alert("Attention! This task has been modified by another user. Refresh the page to see the changes!")
+                } else {
+                    alert('Unable to save task.');
+                    const m = error.response?.data?.error || 'Error occurred while saving the task';
+                    setError(m);
+                }
             }
         }
 

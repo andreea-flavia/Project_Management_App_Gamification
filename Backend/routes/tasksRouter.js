@@ -56,19 +56,26 @@ tasksRouter.route('/task/:id')
     })
     .put(async (req, res) => {
         try {
+            
+            const taskDB = await getTaskById(req.params.id);
             if (req.user.role === ROLES.STANDARD) {
-                const taskDB = await getTaskById(req.params.id);
                 if (!taskDB)
                     return res.status(404).json({ error: 'Task not found' });
                 if (taskDB.assigned_to !== req.user.userId) {
                     return res.status(403).json({ error: 'Forbidden: You cannot edit other users tasks!' });
                 }
             }
+
+            if (req.body.version !== undefined && Number(taskDB.version) !== Number(req.body.version)) {
+                return res.status(409).json({ error: 'Attention! This task has been modified by another user. Refresh the page to see the changes!' });
+            }
+
             const task_upd = await updateTask(req.params.id, req.body);
             if (task_upd)
                 return res.json(task_upd);
             return res.status(404).json({ error: 'Task not found' });
         } catch (error) {
+
             console.error("Error in PUT /task/:id :", error);
             return res.status(500).json({ error: 'Server error during task update' });
         }

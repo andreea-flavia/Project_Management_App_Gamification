@@ -48,6 +48,10 @@ async function updateTask(id, taskData) {
         return null;
     }
 
+    if (taskData.version !== undefined) {
+        task.version = taskData.version;
+    }
+
     const { tags, ...fields } = taskData;
     await task.update(fields);
 

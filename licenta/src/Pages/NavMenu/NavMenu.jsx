@@ -15,7 +15,7 @@ const NavMenu = ({ isOpen, onClose }) => {
         { name: 'Projects', path: '/projects', icon: 'account_tree' },
         { name: 'My Team (Leaderboard)', path: '/team', icon: 'group' },
         { name: 'My Progress', path: '/profile', icon: 'account_circle' },
-        { name: 'Analytics', path: '/analytics', icon: 'insights     ' }
+        { name: 'Analytics', path: '/analytics', icon: 'insights' }
 
     ];
 
@@ -28,6 +28,7 @@ const NavMenu = ({ isOpen, onClose }) => {
         //sa nu uit sa fac clear session , token
         localStorage.removeItem('user_token');
         localStorage.removeItem('user_id');
+        localStorage.removeItem('user_role');
         navigate('/login');
         onClose();
     }
