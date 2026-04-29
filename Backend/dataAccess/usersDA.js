@@ -9,6 +9,12 @@ async function createUser(user) {
             user.picture_url = default_picture;
         }
 
+        if(user.user_first_name && user.user_last_name){
+            const first_letter = user.user_first_name.trim()[0].toLowerCase();
+            const last_name_part = user.user_last_name.trim().toLowerCase();
+            user.username = `${first_letter}-${last_name_part}`;
+        }
+
         const hash_pass = await bcrypt.hash(user.user_password_hash, 10);
         user.user_password_hash = hash_pass;
 

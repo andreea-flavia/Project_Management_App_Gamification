@@ -46,6 +46,11 @@ const Users = db.define('Users', {
     function:{     //denumirea postului ocupat de utilizator
         type: Sequelize.STRING,
         allowNull: false
+    },
+    username:{
+        type: Sequelize.STRING,
+        allowNull: false
+        // unique: true
     }
     // ,
     // xp_points:{

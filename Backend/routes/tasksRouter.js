@@ -1,8 +1,9 @@
 import verifyRole from '../Middleware/verifyRole.js';
 import express from 'express';
 import { ROLES } from '../constants/roles.js';
+import { LOG_ENTITY_TYPES } from '../constants/log_entity_type.js';
+import { LOG_ACTIONS } from '../constants/log_action.js';
 
-//Backend\Constants\roles.js
 
 import {
     createTask,
@@ -15,12 +16,15 @@ import {
     countCompletedTask
 } from '../dataAccess/TaskDA.js';
 
+import { logAction } from '../dataAccess/AuditLogDA.js';
+
 let tasksRouter = express.Router();
 
 tasksRouter.route('/task')
     .post(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
         try {
             const new_task = await createTask(req.body);
+            await logAction(req.user.userId, LOG_ACTIONS.CREATE, LOG_ENTITY_TYPES.TASK, new_task.task_id, new_task);
             return res.status(201).json(new_task);
         } catch (e) {
             return res.status(400).json({ error: e.message });
@@ -39,7 +43,6 @@ tasksRouter.route('/task')
                 return res.json(userTasks);
             }
         } catch (err) {
-            console.error("==== EROARE SQL / BACKEND ====");
             console.error(err);
             return res.status(500).json({ error: 'Error getting tasks' });
         }
@@ -71,8 +74,10 @@ tasksRouter.route('/task/:id')
             }
 
             const task_upd = await updateTask(req.params.id, req.body);
-            if (task_upd)
+            if (task_upd){
+                await logAction(req.user.userId, LOG_ACTIONS.UPDATE, LOG_ENTITY_TYPES.TASK, task_upd.task_id, { previous: taskDB, updated: task_upd });
                 return res.json(task_upd);
+            }
             return res.status(404).json({ error: 'Task not found' });
         } catch (error) {
 
@@ -82,8 +87,10 @@ tasksRouter.route('/task/:id')
     })
     .delete(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
         const task_del = await deleteTask(req.params.id);
-        if (task_del)
+        if (task_del){
+            await logAction(req.user.userId, LOG_ACTIONS.DELETE, LOG_ENTITY_TYPES.TASK, task_del.task_id, task_del);
             return res.json(task_del);
+        }
         return res.status(404).json({ error: 'Task not found' });
     })
     .patch(async (req, res) => {

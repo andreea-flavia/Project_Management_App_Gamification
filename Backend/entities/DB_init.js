@@ -8,6 +8,7 @@ import Priorities from './Nom_priority.js';
 import Nom_Tags from './Nom_tags.js';
 import Tasks_Tags from './Tasks_Tags.js';
 import User_Stats from './User_Stats.js';
+import AuditLog from './AuditLog.js';
 
 env.config();
 
@@ -49,6 +50,10 @@ function PK_Config(){
     Priorities.hasMany(Projects, {foreignKey: 'priority'});
     Projects.belongsTo(Priorities, {foreignKey: 'priority'});
 
+    Users.hasMany(AuditLog, {foreignKey: 'user_id'});
+    AuditLog.belongsTo(Users, {foreignKey: 'user_id'});
+
+
 //------------- n-n -------------//
     Tasks.belongsToMany(Nom_Tags, { through: 'Tasks_Tags', foreignKey: 'task_id' , as: 'tags'});
     Nom_Tags.belongsToMany(Tasks, { through: 'Tasks_Tags', foreignKey: 'tag_id', as: 'tasks' });
@@ -56,6 +61,7 @@ function PK_Config(){
 // ------------- 1-1 -------------//
     Users.hasOne(User_Stats, {foreignKey: 'user_id'});
     User_Stats.belongsTo(Users, {foreignKey: 'user_id'});
+
 
 }
 

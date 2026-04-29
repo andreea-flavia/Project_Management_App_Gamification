@@ -333,3 +333,52 @@
     font-family: var(--font-mono);
 
 }
+
+
+
+/* AUDIT */
+
+.logs_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+    ;
+}
+
+.logs_table th {
+    background-color: #53a066;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.logs_table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.logs_table tr{
+    background-color: #ffffff;
+}
+
+.logs_table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.details_cell pre {
+    background: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    max-width: 300px;
+    overflow-x: auto;
+    border: 1px solid #eee;
+}
+
+summary {
+    cursor: pointer;
+    color: var(--secondary);
+    font-weight: 500;
+    font-weight: 1000;
+}

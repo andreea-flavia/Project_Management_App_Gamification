@@ -1,0 +1,6 @@
+export const LOG_ACTIONS = {
+    CREATE: 'CREATE',
+    UPDATE: 'UPDATE',
+    DELETE: 'DELETE',
+    UPLOAD_FILE: 'UPLOAD_FILE'
+};

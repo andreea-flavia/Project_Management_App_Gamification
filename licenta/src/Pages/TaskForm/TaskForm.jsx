@@ -8,13 +8,21 @@ import { ROLES } from '../../constants/roles.js';
 
 const TaskForm = () => {
     const navigate = useNavigate();
+    const getToday =() => new Date().toISOString().split('T')[0];
+    const getTomorrow = () => { 
+        const t = new Date();
+        t.setDate(t.getDate() + 1);
+        return t.toISOString().split('T')[0];
+    }
     const [task, setTask] = useState({
         task_title: '',
         task_description: '',
-        status: '',
-        priority: '',
+        status: 1,
+        priority: 1,
         tags: [],
-        xp_points: 0  // Inițializare XP points
+        xp_points: 0,
+        start_date: getToday(),
+        end_date: getTomorrow() 
     });
     // const [loading] = useState(true);
     const { id } = useParams();
@@ -29,6 +37,8 @@ const TaskForm = () => {
 
     const userRole = localStorage.getItem('user_role');
 
+    const [logs, setLogs] = useState([]);
+
     //NOTITA VIRTUALA: fac o ruta in router, daca statusul e completed, i se atribuie xp userului (al carui id il pot lua din localStorage) si se verifica daca a depasit xp ul maxim pe nivelul respectiv cu formula 100 * nivel^2,
     // daca da, se incrementeaza nivelul si se reseteaza xp ul curent la 0, iar xp ul total se pastreaza (pentru statistici), daca taskul e marcat ca completed, nu mai poate fi editat
 
@@ -40,6 +50,9 @@ const TaskForm = () => {
                     setTask(r.data);
                     setSelectedTagIds(r.data.tags?.map(tag => tag.tag_id) || []);
                     setInitialStatus(r.data.status);
+
+                    const logsResponse = await api.get(`/logs/${id}`);
+                    setLogs(logsResponse.data);
                 }
 
                 const [statusRes, priorityRes, tagsRes] = await Promise.all([
@@ -107,7 +120,11 @@ const TaskForm = () => {
 
                 if (id) {
                     //fac upd la task
-                    await api.put(`/task/${id}`, task);
+                    const response = await api.put(`/task/${id}`, task);
+                    setTask(response.data);
+
+                    const logsResponse = await api.get(`/logs/${id}`);
+                    setLogs(logsResponse.data);
                     alert('Task updated successfully!');
 
                     setInitialStatus(task.status);
@@ -117,14 +134,13 @@ const TaskForm = () => {
                             xp: task.xp_points || 0,
                             w_coins: task.xp_points ? Math.floor(task.xp_points / 10) : 0  // coins = nr xp / 10
                         });
-
-
                         console.log('XP update result:', r.data);
                     }
 
                 } else {
-                    await api.post('/task', task);
-                    alert('Task created successfully!');
+                    const response = await api.post('/task', task);
+                    setTask(response.data);
+                    navigate('/tasks');
                 }
                 // navigate('/tasks');
 
@@ -370,10 +386,52 @@ const TaskForm = () => {
                     <h2>Comments</h2>
                     <p className='no_comments'>No comments yet.</p>
                 </div>
+
+                {userRole === ROLES.ADMIN && (
                 <div className="comments_section">
                     <h2>Audit Logs</h2>
-                    <p className='no_comments'>No logs yet.</p>
+                    {logs.length > 0 ? (
+                            <table className='logs_table'>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>User ID</th>
+                                        <th>Username</th>
+                                        <th>Action</th>
+                                        <th>Entity Type</th>
+                                        <th>Entity ID</th>
+                                        <th>Modification Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {logs.map((log) => (
+                                        <tr key={log.log_id}>
+                                            <td>{new Date(log.createdAt).toLocaleString('ro-RO')}</td>
+                                            <td><strong>{log.user_id}</strong></td>
+                                            <td><strong>{log.User.username}</strong></td>
+                                            <td>{log.action}</td>
+                                            <td>{log.entity_type}</td>
+                                            <td>#{log.entity_id}</td>
+                                            <td className="details_cell">
+                                                {log.details ? (
+                                                    <details>
+                                                        <summary>See data</summary>
+                                                        <pre>{JSON.stringify(JSON.parse(log.details), null, 2)}</pre>
+                                                    </details>
+                                                ) : (
+                                                    <span className="no_details">No logs yet.</span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p>No logs yet.</p>
+                        )
+                    }
                 </div>
+                )}
 
             </div>
 
