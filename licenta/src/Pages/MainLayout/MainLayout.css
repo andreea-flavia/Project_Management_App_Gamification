@@ -2,13 +2,14 @@
     min-height: 100vh;
     background-color: var(--neutral-dark);
     color: var(--on-surface);
+    position: relative;
 }
 
 .menu_trigger_btn {
     position: fixed;
     top: 30px;
     left: 30px;
-    z-index: 100; 
+    z-index: 100;
     background-color: var(--primary);
     color: var(--surface-light);
     border: none;
@@ -27,16 +28,16 @@
 }
 
 .page_content {
-    padding: 100px 40px 40px 40px; 
+    padding: 100px 40px 40px 40px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-.titlu_vertical{
+.titlu_vertical {
     position: fixed;
-    top: 100px; 
-    left: 40px; 
-    width: 50px; 
+    top: 100px;
+    left: 40px;
+    width: 50px;
     display: flex;
     justify-content: center;
     font-family: var(--font-headline);
@@ -51,4 +52,40 @@
     line-height: 1;
     pointer-events: none;
     z-index: 10;
+}
+
+/* ----------------- */
+.user_identity_header {
+    position: fixed;
+    top: 24px;
+    right: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+}
+
+.user_info_text {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.user_name {
+    font-family: var(--font-headline);
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--on-surface);
+    letter-spacing: 1px;
+}
+
+.user_role {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--primary);
+    /* Verdele tău neon */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.8;
 }

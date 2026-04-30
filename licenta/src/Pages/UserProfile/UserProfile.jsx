@@ -1,17 +1,21 @@
 import './UserProfile.css';
+import { ROLES } from '../../constants/roles.js';
 
 import React, { useEffect, useState } from 'react';
 import api from '../../api.js';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile = () => {
 
     const user_id = localStorage.getItem("user_id");
+    const userRole = localStorage.getItem('user_role');
 
     const [user, setUser] = useState(null);
     const [stats, setStats] = useState(null);
     const [compTasks, setCompTasks] = useState(0);
     const [skills, setSkills] = useState([]);
     // const [maxXP, setMaxXP] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -91,7 +95,7 @@ const UserProfile = () => {
                         />
                     </div>
                     <div className="avatar_tag">
-                        Level {stats?.level || 1} - {user?.user_first_name}
+                        Level {stats?.level || 1} - {user?.username}
                         {/* #{user?.user_id} {user?.user_first_name} {user?.user_last_name ? ` ${user.user_last_name.charAt(0)}.` : ''} */}
                     </div>
                 </div>
@@ -180,66 +184,27 @@ const UserProfile = () => {
                 </div>
             </section>
 
-            <h1>User Profile</h1>
-            <p>Name: {user?.user_first_name} {user?.user_last_name}</p>
-            <p>User ID: {user?.user_id}</p>
-            <p>{stats?.xp_points?.toLocaleString()} / {stats?.xp_points_req?.toLocaleString()} XP</p>
-            <p>{stats?.w_coins?.toLocaleString()} coins</p>
+            {userRole === ROLES.ADMIN && (
+                <section className="audit_navigation_section">
+                    <div className="audit_card">
+                        <div className="audit_content">
+                            <div className="audit_header">
+                                <h3 className="audit_title">System Audit Log</h3>
+                            </div>
+                            <p className="audit_description">
+                                Review all security events, data modifications, and access history associated with this operative identity.
+                            </p>
+                        </div>
+                        <button className="audit_action_btn" onClick={() => navigate('/audit')} >
+                            <span>ACCESS AUDIT CORE {'>>'}</span>
+                        </button>
+                    </div>
+                </section>
+            )}
+
         </main>
 
 
-
-
-
-
-
-
-
-
-        // <main className='main_content_account'>
-        //     <div className='header_section_account'>
-        //         <div className='name_section_account'>
-        //             <span className="profile_tag">System Identity // User Profile #{user_id}</span>
-        //             <h1 className="profile_title">{first_name} {last_name}</h1>
-        //             <h1 className="profile_title">{last_name}</h1>
-        //         </div>
-        //     </div>
-
-        //     <div className='main_section'>
-
-
-        //             <div className="sec_1">
-        //                 <div className='profile_avatar_wrapper'>
-        //                     {user?.picture_url ? (
-        //                         <img 
-        //                             src={user?.picture_url}
-        //                             alt="User Profile"
-        //                             className='prf_image'
-        //                         />
-        //                     ) : (
-        //                         <div className='prp_placeholder'>
-        //                             <span className="material-symbols-outlined">person</span>
-        //                         </div>
-        //                     )}
-        //                 </div> 
-        //                 <span className="lvl_number">LVL {stats?.level}</span>
-        //                 <div className='xp_section'>
-        //                     <span className="current_xp">{stats?.xp_points?.toLocaleString()}</span>
-        //                     <span className="divider"> / </span>
-        //                     <span className="total_xp">{calcMaxXP(stats?.level)?.toLocaleString()} XP</span>
-        //                 </div>
-        //                 <span className="coin_number">{stats?.w_coins?.toLocaleString()} coins</span>
-        //             </div>
-        //             <div className="sec_2">2</div>
-        //             <div className="sec_3">3</div>
-        //             // <div className="sec_4">4</div> 
-
-        //     </div> 
-        //      <img
-        //         src={user?.picture_url}
-        //         alt="User Profile"
-        //     /> 
-        // </main>
     )
 }
 

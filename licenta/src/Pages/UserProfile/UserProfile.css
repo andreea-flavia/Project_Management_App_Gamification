@@ -390,3 +390,107 @@
     border-top: 5px solid var(--primary);
     background-color: rgb(255, 255, 255);
 }
+
+
+
+
+/* AUDIT -------------------------- */
+
+.audit_navigation_section {
+    margin-top: 40px;
+    width: 100%;
+    border-top: 1px solid #ddd9d9
+}
+
+.audit_card {
+    background: var(--surface-container-low);
+    border: 1px solid var(--outline-variant);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .audit_card {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.audit_card:hover {
+    border-color: var(--tertiary);
+    /* Folosește culoarea de accent */
+}
+
+/* Efect de fundal tip grid/linii pentru sectiunea de audit */
+.audit_card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, var(--tertiary) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.audit_header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+
+.audit_title {
+    font-family: var(--font-headline);
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--on-surface);
+}
+
+.audit_description {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    max-width: 500px;
+    line-height: 1.5;
+}
+
+.audit_action_btn {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: #fff;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+    .audit_action_btn {
+        margin-top: 0;
+    }
+}
+
+.audit_action_btn:hover {
+    background: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(var(--tertiary-rgb), 0.3);
+}

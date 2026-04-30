@@ -9,6 +9,7 @@ import Tasks from './Pages/Tasks';
 import ProtectedRoute from './Pages/ProtectedRoute.jsx';
 import TaskForm from './Pages/TaskForm';
 import UserProfile from './Pages/UserProfile';
+import AuditLogs from './Pages/AuditLogs';
 
 import { ROLES } from './constants/roles';
 
@@ -28,6 +29,9 @@ function App() {
             <Route path="/tasks" element={<Tasks />} />
             <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]} />}>
               <Route path="/tasks/new" element={<TaskForm />} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
+              <Route path="/audit" element={<AuditLogs />} />
             </Route>
             <Route path="/tasks/edit/:id" element={<TaskForm />} />
             <Route path="/profile" element={<UserProfile />} />

@@ -49,7 +49,7 @@ const LoginPage = () => {
             <main className='grid'>
                 <section className="sectiune_imagine">
                     <div className='brand'>
-                        <span className="brand_name">RHODON</span>
+                        <span className="brand_name">SYNCRO</span>
                         <span className="brand_tagline">SECURE_TERMINAL_v2.0</span>
                     </div>
                     <img src='/green_bg.jpg' alt="Dream Big" className='imagine' />
@@ -67,7 +67,7 @@ const LoginPage = () => {
                                 <div className="input_container">
                                     <input
                                         type="email"
-                                        placeholder="ex: flavia.tanasescu@rhodon.ro"
+                                        placeholder="ex: flavia.tanasescu@syncro.ro"
                                         spellCheck="false"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}

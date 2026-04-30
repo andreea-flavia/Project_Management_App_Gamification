@@ -17,37 +17,37 @@ const Users = db.define('Users', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    user_mail:{
+    user_mail: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
-        validate:{
+        validate: {
             isEmail: true,
-            isCorrEmail(value){
-                if(!value.endsWith('@rhodon.ro')){
-                    throw new Error('Email must end with @rhodon.ro');
+            isCorrEmail(value) {
+                if (!value.endsWith('@syncro.ro')) {
+                    throw new Error('Email must end with @syncro.ro');
                 }
             }
         }
     },
-    user_password_hash:{
+    user_password_hash: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    picture_url:{  //poza de profil
+    picture_url: {  //poza de profil
         type: Sequelize.STRING,
         allowNull: true
     },
-    role:{       //denumirea rolului (Admin, Manager, Standard)
+    role: {       //denumirea rolului (Admin, Manager, Standard)
         type: Sequelize.ENUM('Admin', 'Manager', 'Standard'),
         allowNull: false,
         defaultValue: 'Standard'
     },
-    function:{     //denumirea postului ocupat de utilizator
+    function: {     //denumirea postului ocupat de utilizator
         type: Sequelize.STRING,
         allowNull: false
     },
-    username:{
+    username: {
         type: Sequelize.STRING,
         allowNull: false
         // unique: true
@@ -63,7 +63,7 @@ const Users = db.define('Users', {
     //     allowNull: false,
     //     defaultValue: 1
     // }
-},{
+}, {
     timestamps: true
 });
 
