@@ -17,30 +17,35 @@ const Projects = db.define('Projects', {
         allowNull: true
     },
 
-    start_date:{
+    start_date: {
         type: Sequelize.DATE,
         allowNull: false
     },
-    end_date:{
+    end_date: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: true
     },
 
-    status:{
+    status: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references:{
+        references: {
             model: 'Nom_Statuses',
             key: 'status_id'
         }
     },
-    priority:{
+    priority: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references:{
+        references: {
             model: 'Nom_Priorities',
             key: 'priority_id'
         }
+    },
+    is_inbox: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
     }
 }, {
     timestamps: true

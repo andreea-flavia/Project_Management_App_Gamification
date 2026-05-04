@@ -10,6 +10,7 @@ import ProtectedRoute from './Pages/ProtectedRoute.jsx';
 import TaskForm from './Pages/TaskForm';
 import UserProfile from './Pages/UserProfile';
 import AuditLogs from './Pages/AuditLogs';
+import Projects from './Pages/Projects'
 
 import { ROLES } from './constants/roles';
 
@@ -35,6 +36,7 @@ function App() {
             </Route>
             <Route path="/tasks/edit/:id" element={<TaskForm />} />
             <Route path="/profile" element={<UserProfile />} />
+            <Route path="/projects" element={<Projects />} />
           </Route>
         </Route>
 

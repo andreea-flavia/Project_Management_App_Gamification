@@ -9,63 +9,68 @@ import Nom_Tags from './Nom_tags.js';
 import Tasks_Tags from './Tasks_Tags.js';
 import User_Stats from './User_Stats.js';
 import AuditLog from './AuditLog.js';
+import Project_Members from './Project_Members.js';
 
 env.config();
 
-function DB_Create(){
+function DB_Create() {
     let conn;
     conn = mysql.createConnection({
         user: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD
     })
-    .then( (connection) => {
-        conn = connection;
-        return conn.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_DATABASE}`);
-    })
-    .then(() => {
-        return conn.end();
-    })
-    .catch( (error) => {
-        console.warn(error.stack);
-    })
+        .then((connection) => {
+            conn = connection;
+            return conn.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_DATABASE}`);
+        })
+        .then(() => {
+            return conn.end();
+        })
+        .catch((error) => {
+            console.warn(error.stack);
+        })
 }
 
-function PK_Config(){
-//------------- 1-n -------------//
-    Users.hasMany(Tasks, {foreignKey: 'assigned_to'});
-    Tasks.belongsTo(Users, {foreignKey: 'assigned_to'});
+function PK_Config() {
+    //------------- 1-n -------------//
+    Users.hasMany(Tasks, { foreignKey: 'assigned_to' });
+    Tasks.belongsTo(Users, { foreignKey: 'assigned_to' });
 
-    Projects.hasMany(Tasks, {foreignKey: 'project_id'});
-    Tasks.belongsTo(Projects, {foreignKey: 'project_id'});
-
-    Statuses.hasMany(Tasks, {foreignKey: 'status'});
-    Tasks.belongsTo(Statuses, {foreignKey: 'status'});
-
-    Priorities.hasMany(Tasks, {foreignKey: 'priority'});
-    Tasks.belongsTo(Priorities, {foreignKey: 'priority'});
-    
-    Statuses.hasMany(Projects, {foreignKey: 'status'});
-    Projects.belongsTo(Statuses, {foreignKey: 'status'});
-
-    Priorities.hasMany(Projects, {foreignKey: 'priority'});
-    Projects.belongsTo(Priorities, {foreignKey: 'priority'});
-
-    Users.hasMany(AuditLog, {foreignKey: 'user_id'});
-    AuditLog.belongsTo(Users, {foreignKey: 'user_id'});
+    Projects.hasMany(Tasks, { foreignKey: 'project_id' });
+    Tasks.belongsTo(Projects, { foreignKey: 'project_id' });
 
 
-//------------- n-n -------------//
-    Tasks.belongsToMany(Nom_Tags, { through: 'Tasks_Tags', foreignKey: 'task_id' , as: 'tags'});
+    Statuses.hasMany(Tasks, { foreignKey: 'status' });
+    Tasks.belongsTo(Statuses, { foreignKey: 'status' });
+
+    Priorities.hasMany(Tasks, { foreignKey: 'priority' });
+    Tasks.belongsTo(Priorities, { foreignKey: 'priority' });
+
+    Statuses.hasMany(Projects, { foreignKey: 'status' });
+    Projects.belongsTo(Statuses, { foreignKey: 'status' });
+
+    Priorities.hasMany(Projects, { foreignKey: 'priority' });
+    Projects.belongsTo(Priorities, { foreignKey: 'priority' });
+
+    Users.hasMany(AuditLog, { foreignKey: 'user_id' });
+    AuditLog.belongsTo(Users, { foreignKey: 'user_id' });
+
+
+    //------------- n-n -------------//
+    Tasks.belongsToMany(Nom_Tags, { through: 'Tasks_Tags', foreignKey: 'task_id', as: 'tags' });
     Nom_Tags.belongsToMany(Tasks, { through: 'Tasks_Tags', foreignKey: 'tag_id', as: 'tasks' });
 
-// ------------- 1-1 -------------//
-    Users.hasOne(User_Stats, {foreignKey: 'user_id'});
-    User_Stats.belongsTo(Users, {foreignKey: 'user_id'});
+    Projects.belongsToMany(Users, { through: Project_Members, foreignKey: 'project_id', as: 'members' });
+    Users.belongsToMany(Projects, { through: Project_Members, foreignKey: 'user_id', as: 'projects' });
+
+    // ------------- 1-1 -------------//
+    Users.hasOne(User_Stats, { foreignKey: 'user_id' });
+    User_Stats.belongsTo(Users, { foreignKey: 'user_id' });
 
 
 }
 
-function DB_Init(){
+function DB_Init() {
     DB_Create();
     PK_Config();
 }

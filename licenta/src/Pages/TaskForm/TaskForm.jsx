@@ -8,8 +8,8 @@ import { ROLES } from '../../constants/roles.js';
 
 const TaskForm = () => {
     const navigate = useNavigate();
-    const getToday =() => new Date().toISOString().split('T')[0];
-    const getTomorrow = () => { 
+    const getToday = () => new Date().toISOString().split('T')[0];
+    const getTomorrow = () => {
         const t = new Date();
         t.setDate(t.getDate() + 1);
         return t.toISOString().split('T')[0];
@@ -22,7 +22,7 @@ const TaskForm = () => {
         tags: [],
         xp_points: 0,
         start_date: getToday(),
-        end_date: getTomorrow() 
+        end_date: getTomorrow()
     });
     // const [loading] = useState(true);
     const { id } = useParams();
@@ -367,10 +367,6 @@ const TaskForm = () => {
                             <label className="section_label">Assigned Member</label>
                         </div>
 
-                        <div className='s1_section'>
-                            <label className="section_label">Assigned Team</label>
-                        </div>
-
                         {(userRole === ROLES.ADMIN || userRole === ROLES.MANAGER) && id && (
                             <div>
                                 <button className='btn_delete_task' onClick={handleDelete}>
@@ -388,9 +384,9 @@ const TaskForm = () => {
                 </div>
 
                 {userRole === ROLES.ADMIN && (
-                <div className="comments_section">
-                    <h2>Audit Logs</h2>
-                    {logs.length > 0 ? (
+                    <div className="comments_section">
+                        <h2>Audit Logs</h2>
+                        {logs.length > 0 ? (
                             <table className='logs_table'>
                                 <thead>
                                     <tr>
@@ -429,8 +425,8 @@ const TaskForm = () => {
                         ) : (
                             <p>No logs yet.</p>
                         )
-                    }
-                </div>
+                        }
+                    </div>
                 )}
 
             </div>

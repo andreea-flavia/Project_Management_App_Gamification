@@ -4,6 +4,7 @@ async function getStatuses() {
     return await Statuses.findAll();
 }
 
+
 export {
     getStatuses
 }

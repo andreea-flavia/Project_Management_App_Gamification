@@ -3,6 +3,7 @@ import './AuditLogs.css';
 import api from '../../api.js';
 import { LOG_ACTIONS } from '../../constants/log_action.js';
 import { LOG_ENTITY_TYPES } from '../../constants/log_entity_type.js';
+import { Link } from 'react-router-dom';
 
 
 const AuditLogs = () => {
@@ -61,6 +62,9 @@ const AuditLogs = () => {
     return (
         <div className="audit_page_container">
             <header className="audit_page_header">
+                <Link className='audit_btn_back' to={`/profile`}>
+                    {'<<'} Back
+                </Link>
                 <h1 className="audit_title_main">System <span className="text_accent">Audit</span> Core</h1>
                 <p className="audit_subtitle">Monitoring all operative activities and security events.</p>
             </header>

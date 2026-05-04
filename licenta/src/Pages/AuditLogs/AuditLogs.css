@@ -26,6 +26,31 @@
     opacity: 0.7;
 }
 
+/* batn back */
+
+.audit_btn_back {
+    background: var(--on-surface-variant);
+    color: #ffffff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    z-index: 100;
+    width: fit-content;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+}
+
+.audit_btn_back:hover {
+    transform: translateY(-8px);
+}
+
+/* ----------- */
+
 .audit_table_wrapper {
     background: #f6f6f7;
     border: 1px solid var(--outline-variant);

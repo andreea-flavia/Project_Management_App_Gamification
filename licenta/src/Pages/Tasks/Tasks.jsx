@@ -50,7 +50,7 @@ const Tasks = () => {
                 });
                 setSColorMap(sColorMap);
 
-                const priorityR = await api.get('/priorities');
+                const priorityR = await api.get('/priorities/TASK');
                 const pMap = {};
                 priorityR.data.forEach(p => {
                     pMap[p.priority_id] = p.priority_name;
