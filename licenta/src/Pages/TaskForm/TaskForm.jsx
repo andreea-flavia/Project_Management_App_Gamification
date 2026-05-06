@@ -36,8 +36,11 @@ const TaskForm = () => {
     const [error, setError] = useState('');
 
     const userRole = localStorage.getItem('user_role');
+    // const userId = localStorage.getItem('user_id');
 
     const [logs, setLogs] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [users, setUsers] = useState([]);
 
     //NOTITA VIRTUALA: fac o ruta in router, daca statusul e completed, i se atribuie xp userului (al carui id il pot lua din localStorage) si se verifica daca a depasit xp ul maxim pe nivelul respectiv cu formula 100 * nivel^2,
     // daca da, se incrementeaza nivelul si se reseteaza xp ul curent la 0, iar xp ul total se pastreaza (pentru statistici), daca taskul e marcat ca completed, nu mai poate fi editat
@@ -54,16 +57,36 @@ const TaskForm = () => {
                     const logsResponse = await api.get(`/logs/${id}`);
                     setLogs(logsResponse.data);
                 }
-
-                const [statusRes, priorityRes, tagsRes] = await Promise.all([
-                    api.get('/statuses'),
-                    api.get('/priorities'),
-                    api.get('/tags')
-                ]);
-
-                setStatusOptions(statusRes.data);
-                setPriorityOptions(priorityRes.data);
-                setAllTags(tagsRes.data);
+                try {
+                    const statusRes = await api.get('/statuses/TASK');
+                    setStatusOptions(statusRes.data);
+                } catch (e) {
+                    console.error('Error fetching statuses:', e);
+                }
+                try {
+                    const priorityRes = await api.get('/priorities/TASK');
+                    setPriorityOptions(priorityRes.data);
+                } catch (e) {
+                    console.error('Error fetching priorities:', e);
+                }
+                try {
+                    const tagsRes = await api.get('/tags');
+                    setAllTags(tagsRes.data);
+                } catch (e) {
+                    console.error('Error fetching tags:', e);
+                }
+                try {
+                    const projectRes = await api.get('/my-projects');
+                    setProjects(projectRes.data);
+                } catch (e) {
+                    console.error('Error fetching projects:', e);
+                }
+                try {
+                    const usersRes = await api.get('/user');
+                    setUsers(usersRes.data);
+                } catch (e) {
+                    console.error('Error fetching users:', e);
+                }
             } catch (e) {
                 console.error('Error fetching task data:', e);
             }
@@ -74,18 +97,32 @@ const TaskForm = () => {
     const handleChange = (e) => {
         try {
             const { name, value } = e.target;
-            setTask(prev => ({
-                ...prev,
-                [name]: name === 'status' || name === 'priority' || name === 'xp_points'
-                    ? (value ? parseInt(value, 10) : (name === 'xp_points' ? 0 : ''))
-                    : value
-            }));
+            setTask(prev => {
+                const updatedTask = {
+                    ...prev,
+                    [name]: name === 'status' || name === 'priority' || name === 'xp_points' || name === 'project_id' || name === 'assigned_to'
+                        ? (value ? parseInt(value, 10) : (name === 'xp_points' ? 0 : ''))
+                        : value
+                };
+                // if (name === 'assigned_to' && (value === '' || value === null)) {
+                //     updatedTask.status = 1;
+                // }
+                if (name === 'assigned_to') {
+                    if (value === '' || value === null) {
+                        updatedTask.status = 1;
+                    } else {
+                        updatedTask.status = 2;
+                    }
+                }
+                return updatedTask;
+            });
         } catch (e) {
             console.error('Error: ', e);
         }
     };
 
-    const isCompleted = task.status === 4;
+
+    const isCompleted = initialStatus === 4;
     const user_id = localStorage.getItem("user_id");
     const isViewOnly = userRole === ROLES.STANDARD && task.assigned_to !== parseInt(user_id);
 
@@ -117,10 +154,18 @@ const TaskForm = () => {
         // console.log(initialStatus, ',' , task.status);
         if (confirm_panel) {
             try {
+                const taskToSave = { ...task };
+
+                if (taskToSave.assigned_to === '') {
+                    taskToSave.assigned_to = null;
+                }
+                if (taskToSave.project_id === '') {
+                    taskToSave.project_id = null;
+                }
 
                 if (id) {
                     //fac upd la task
-                    const response = await api.put(`/task/${id}`, task);
+                    const response = await api.put(`/task/${id}`, taskToSave);
                     setTask(response.data);
 
                     const logsResponse = await api.get(`/logs/${id}`);
@@ -138,7 +183,7 @@ const TaskForm = () => {
                     }
 
                 } else {
-                    const response = await api.post('/task', task);
+                    const response = await api.post('/task', taskToSave);
                     setTask(response.data);
                     navigate('/tasks');
                 }
@@ -361,17 +406,49 @@ const TaskForm = () => {
 
                         <div className='s1_section'>
                             <label className="section_label">Part of project</label>
+                            <select
+                                className='s1_input'
+                                name="project_id"
+                                value={task.project_id || 6}
+                                onChange={handleChange}
+                                disabled={isCompleted || userRole === ROLES.STANDARD}
+                            >
+                                <option value="" disabled>Select a project</option>
+                                {projects.map(project => (
+                                    <option key={project.project_id} value={project.project_id}>
+                                        {project.project_name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className='s1_section'>
                             <label className="section_label">Assigned Member</label>
+                            <select
+                                className='s1_input'
+                                name="assigned_to"
+                                value={task.assigned_to || ''}
+                                onChange={handleChange}
+                                disabled={isCompleted || userRole === ROLES.STANDARD}
+                            >
+                                <option value="">Unassigned</option>
+                                {users.map(user => (
+                                    <option key={user.user_id} value={user.user_id}>
+                                        {user.username}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
+
 
                         {(userRole === ROLES.ADMIN || userRole === ROLES.MANAGER) && id && (
                             <div>
-                                <button className='btn_delete_task' onClick={handleDelete}>
-                                    DELETE TASK
-                                </button>
+
+                                <div>
+                                    <button className='btn_delete_task' onClick={handleDelete}>
+                                        DELETE TASK
+                                    </button>
+                                </div>
                             </div>
                         )}
 

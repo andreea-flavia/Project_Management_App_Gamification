@@ -1,0 +1,358 @@
+.prj_form_main {
+    padding: 80px 40px;
+    max-width: 1500px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background-color: var(--bg);
+}
+
+
+
+.prj_form_header_container {
+    margin-bottom: 48px;
+    border-left: 8px solid var(--primary, #00D135);
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.prj_form_system_log {
+    color: var(--on-surface, #000000);
+    font-family: var(--font-mono, monospace);
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.prj_form_project_title {
+    font-family: var(--font-mono, monospace);
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    color: var(--on-surface, #000000);
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    font-style: italic;
+    line-height: 0.9;
+    margin: 7px;
+    position: relative;
+}
+
+
+.prj_form_btn_back {
+    display: inline-flex;
+    align-items: center;
+    background: var(--on-surface-variant);
+    color: #ffffff;
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    z-index: 100;
+    width: fit-content;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    margin-bottom: 30px;
+}
+
+.prj_form_btn_back:hover {
+    transform: translateX(-6px);
+}
+
+
+
+.prj_form_parent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
+
+
+}
+
+.prj_form_div1 {
+    padding: 24px;
+    border-bottom: 4px solid transparent;
+    border-bottom-color: var(--primary);
+    background-color: #ffffff;
+
+}
+
+.prj_form_div2 {
+    padding: 24px;
+    border-bottom: 4px solid transparent;
+    border-bottom-color: var(--secondary);
+    background-color: #ffffff;
+}
+
+
+.prj_form_div3 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-column-start: 1;
+    grid-row-start: 2;
+    border-bottom: 4px solid transparent;
+    background-color: #ffffff;
+    border-bottom-color: var(--primary);
+}
+
+.prj_form_div4 {
+    grid-row: span 3 / span 3;
+    grid-column-start: 3;
+    grid-row-start: 1;
+    border-bottom: 4px solid transparent;
+    background-color: #ffffff;
+    border-bottom-color: var(--secondary);
+}
+
+
+.prj_form_status_label {
+    font-size: 10px;
+    color: var(--on-surface-variant, #a0a0a0);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.prj_form_status_value {
+    font-family: var(--font-mono, sans-serif);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--on-surface, #fff);
+    line-height: 1;
+}
+
+.prj_form_status_meta {
+    margin-top: 8px;
+    font-size: 12px;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.1em;
+}
+
+/* TASKS TABLE */
+.prj_tasks_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono, monospace);
+    table-layout: fixed;
+}
+
+.prj_tasks_table th {
+    text-align: left;
+    padding: 12px;
+    font-size: 13px;
+    color: var(--on-surface-variant, #a0a0a0);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--on-surface, #333);
+    color: var(--primary);
+}
+
+.prj_tasks_table td {
+    padding: 16px 12px;
+    font-size: 14px;
+    color: var(--on-surface, #fff);
+    border-bottom: 1px solid var(--on-surface, #333);
+}
+
+.prj_tasks_table tr:last-child td {
+    border-bottom: none;
+}
+
+.prj_tasks_table tr:hover td {
+    /* background-color: var(--bg, #a0a0a0); */
+    color: var(--primary);
+}
+
+/* TEAM MEMBERS */
+.prj_members_list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.prj_member_item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.prj_member_avatar {
+    width: 36px;
+    height: 36px;
+    background-color: var(--primary);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 14px;
+    font-family: var(--font-mono);
+    overflow: hidden;
+}
+
+.prj_member_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.prj_member_name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--on-surface, #000000);
+}
+
+.prj_member_role {
+    font-size: 10px;
+    color: var(--on-surface-variant, #888);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ADD MEMBER FORM */
+.prj_form_select {
+    background-color: #f5f5f5;
+    color: #000;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    outline: none;
+}
+
+.prj_form_btn_add {
+    background-color: var(--primary);
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-family: var(--font-mono);
+}
+
+.prj_form_btn_add:hover {
+    transform: translateY(-2px);
+}
+
+.prj_tasks_table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.prj_tasks_table th:nth-child(1) {
+    width: 25%;
+}
+
+.prj_tasks_table th:nth-child(2) {
+    width: 35%;
+}
+
+.prj_tasks_table th:nth-child(3) {
+    width: 15%;
+}
+
+.prj_tasks_table th:nth-child(4) {
+    width: 10%;
+}
+
+.prj_tasks_table th:nth-child(5) {
+    width: 15%;
+}
+
+.prj_form_overdue {
+    color: #ff4d4d;
+}
+
+.prj_tasks_section {
+    overflow: auto;
+    padding: 24px;
+}
+
+.prj_tasks_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.prj_tasks_title {
+    font-family: var(--font-mono, monospace);
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--on-surface-variant);
+}
+
+.prj_btn_small {
+    margin-bottom: 0 !important;
+    padding: 6px 16px !important;
+    font-size: 10px !important;
+}
+
+.prj_form_table_row {
+    cursor: pointer;
+}
+
+.prj_no_data {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+.prj_team_panel {
+    padding: 24px;
+}
+
+.prj_add_member_title {
+    margin-top: 32px;
+}
+
+.prj_add_member_form {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.prj_form_header_flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.prj_form_btn_finish {
+    background-color: var(--secondary);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 800;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.prj_form_btn_finish:hover {
+    transform: translateY(-2px);
+}
+
+.prj_form_btn_finish .material-symbols-outlined {
+    font-size: 18px;
+}

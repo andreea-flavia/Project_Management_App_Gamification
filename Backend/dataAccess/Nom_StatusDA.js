@@ -4,7 +4,15 @@ async function getStatuses() {
     return await Statuses.findAll();
 }
 
+async function getStatusessByType(type) {
+    const statuses = await Statuses.findAll({
+        where: { status_type: type }
+    });
+    return statuses;
+}
+
 
 export {
-    getStatuses
+    getStatuses,
+    getStatusessByType
 }

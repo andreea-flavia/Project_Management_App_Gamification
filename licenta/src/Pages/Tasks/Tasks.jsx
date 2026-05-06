@@ -37,7 +37,7 @@ const Tasks = () => {
                 const r = await api.get(`/task`);
                 setTasks(r.data);
 
-                const statusR = await api.get('/statuses');
+                const statusR = await api.get('/statuses/TASK');
                 const sMap = {};
                 statusR.data.forEach(s => {
                     sMap[s.status_id] = s.status_name;

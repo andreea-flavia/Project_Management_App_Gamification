@@ -17,15 +17,15 @@ const LoginPage = () => {
         try {
 
             if (!email.trim() && !password.trim()) {
-                setError("Completeaza ambele campuri!");
+                setError("Complete both fields!");
                 return;
             }
             if (!email.trim()) {
-                setError("Completeaza campul mail!");
+                setError("Complete the mail!");
                 return;
             }
             if (!password.trim()) {
-                setError("Completeaza campul parola!");
+                setError("Complete the password!");
                 return;
             }
 
@@ -39,7 +39,7 @@ const LoginPage = () => {
                 navigate('/home');
             }
         } catch (e) {
-            const m = e.response?.data?.error || 'Eroare de autentificare';
+            const m = e.response?.data?.error || 'Authentication Error';
             setError(m);
         }
     }
@@ -58,8 +58,8 @@ const LoginPage = () => {
                     <div className="glow1"></div>
                     <div className="glow2"></div>
                     <div className='form_wrapper'>
-                        <h2 className='form_header'>Intra in cont</h2>
-                        <p className="form_description">Introdu datele de autentificare pentru a incepe</p>
+                        <h2 className='form_header'>Log into your account</h2>
+                        <p className="form_description">Add your details to begin</p>
 
                         <div className='inputuri'>
                             <div class='input_line'>
@@ -75,7 +75,7 @@ const LoginPage = () => {
                                 </div>
                             </div>
                             <div class='input_line'>
-                                <label className="input_label">Parola</label>
+                                <label className="input_label">Password</label>
                                 <div className="input_container">
                                     <input
                                         type={showPassword ? "text" : "password"}
@@ -104,13 +104,13 @@ const LoginPage = () => {
                         )}
 
                         <button className='btn_auth' onClick={handleLogin}>
-                            <span className="btn_text">Autentificare</span>
+                            <span className="btn_text">Log in</span>
                         </button>
 
                         <div className="req_access">
-                            <p className="req_text">Prima oara?</p>
+                            <p className="req_text">First time?</p>
                             <button type="button" className="req_btn">
-                                Solicita un cont!
+                                Get your account
                             </button>
                         </div>
 

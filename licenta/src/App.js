@@ -10,7 +10,10 @@ import ProtectedRoute from './Pages/ProtectedRoute.jsx';
 import TaskForm from './Pages/TaskForm';
 import UserProfile from './Pages/UserProfile';
 import AuditLogs from './Pages/AuditLogs';
-import Projects from './Pages/Projects'
+import Projects from './Pages/Projects';
+import ProjectForm from './Pages/ProjectForm';
+
+
 
 import { ROLES } from './constants/roles';
 
@@ -30,6 +33,7 @@ function App() {
             <Route path="/tasks" element={<Tasks />} />
             <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]} />}>
               <Route path="/tasks/new" element={<TaskForm />} />
+              <Route path="/projects/new" element={<ProjectForm />} />
             </Route>
             <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
               <Route path="/audit" element={<AuditLogs />} />
@@ -37,6 +41,7 @@ function App() {
             <Route path="/tasks/edit/:id" element={<TaskForm />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/edit/:id" element={<ProjectForm />} />
           </Route>
         </Route>
 

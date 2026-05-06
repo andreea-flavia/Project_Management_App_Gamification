@@ -73,6 +73,47 @@
     color: var(--primary, #00D135);
 }
 
+.new_project_btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--primary);
+    color: #000000;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 4px;
+    font-family: var(--font-headline);
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    z-index: 100;
+    width: fit-content;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+}
+
+.new_project_btn:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(0, 209, 53, 0.08);
+}
+
+.new_project_btn .material-symbols-outlined {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.btn_text_add_project {
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #000000;
+}
+
 
 
 /* MATRICEEEE */
@@ -176,4 +217,155 @@
 .prj_load_value {
     color: var(--primary);
     margin-left: 20px;
+}
+
+/* MODAL STYLES */
+.prj_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    opacity: 0.9;
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+.prj_modal_content {
+    background: #ffffff;
+    border: 2px solid var(--primary);
+    width: 100%;
+    max-width: 500px;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.prj_modal_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.prj_modal_header h3 {
+    font-family: var(--font-mono, monospace);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--primary);
+    margin: 0;
+}
+
+.prj_modal_close {
+    background: transparent;
+    border: none;
+    color: #000;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.prj_modal_close:hover {
+    opacity: 1;
+}
+
+.prj_modal_form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.prj_form_group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.prj_form_group label {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--on-surface-variant);
+    letter-spacing: 0.1em;
+}
+
+.prj_form_group input,
+.prj_form_group textarea,
+.prj_form_group select {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 4px;
+    color: #333;
+    font-family: var(--font-mono, monospace);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.prj_form_group input:focus,
+.prj_form_group textarea:focus,
+.prj_form_group select:focus {
+    border-color: var(--primary);
+}
+
+.prj_form_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.prj_modal_footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.prj_btn_cancel {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #555;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: var(--font-mono);
+}
+
+.prj_btn_create {
+    background: var(--primary);
+    color: #000;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    box-shadow: 0 4px 15px rgba(0, 209, 53, 0.2);
+}
+
+.prj_btn_create:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 209, 53, 0.3);
 }

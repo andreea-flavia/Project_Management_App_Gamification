@@ -3,6 +3,8 @@ import Priorities from '../entities/Nom_priority.js';
 import Statuses from '../entities/Nom_status.js';
 import Nom_Tags from '../entities/Nom_tags.js';
 import { addXP_checkLevel } from './User_StatsDA.js';
+import Project_Members from '../entities/Project_Members.js';
+
 
 async function createTask(task) {
     try {
@@ -11,6 +13,17 @@ async function createTask(task) {
         }
         const tags = task.tags;
         const newTask = await Tasks.create(task);
+        if (task.assigned_to && task.project_id) {
+            await Project_Members.findOrCreate({
+                where: {
+                    user_id: task.assigned_to,
+                    project_id: task.project_id
+                },
+                defaults: {
+                    role: 'MEMBER'
+                }
+            })
+        }
         if (Array.isArray(tags)) {
             const tagIds = tags.map(tag => tag.tag_id ?? tag.id ?? tag).filter(Boolean);
             await newTask.setTags(tagIds);
@@ -54,6 +67,18 @@ async function updateTask(id, taskData) {
 
     const { tags, ...fields } = taskData;
     await task.update(fields);
+
+    if (taskData.assigned_to && taskData.project_id) {
+        await Project_Members.findOrCreate({
+            where: {
+                user_id: taskData.assigned_to,
+                project_id: taskData.project_id
+            },
+            defaults: {
+                role: 'MEMBER'
+            }
+        });
+    }
 
     if (Array.isArray(tags)) {
         const tagIds = tags.map(tag => tag.tag_id ?? tag.id ?? tag).filter(Boolean);
