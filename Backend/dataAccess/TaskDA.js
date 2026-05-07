@@ -4,6 +4,8 @@ import Statuses from '../entities/Nom_status.js';
 import Nom_Tags from '../entities/Nom_tags.js';
 import { addXP_checkLevel } from './User_StatsDA.js';
 import Project_Members from '../entities/Project_Members.js';
+import { checkUserForBadges } from './Nom_BadgesDA.js';
+
 
 
 async function createTask(task) {
@@ -60,13 +62,32 @@ async function updateTask(id, taskData) {
     if (!task) {
         return null;
     }
-
+    const oldStatus = task.status;
     if (taskData.version !== undefined) {
         task.version = taskData.version;
     }
 
+    const finalAssignedTo = taskData.assigned_to !== undefined ? taskData.assigned_to : task.assigned_to;
+
+    if (taskData.status === 4 && !finalAssignedTo) {
+        throw new Error("Cannot complete a task without an assignee.");
+    }
+
     const { tags, ...fields } = taskData;
     await task.update(fields);
+
+    if (oldStatus !== 4 && task.status === 4) {
+        if (task.assigned_to && task.xp_points) {
+            try {
+                await addXP_checkLevel(task.assigned_to, task.xp_points, Math.floor(task.xp_points / 10));
+                await checkUserForBadges(task.assigned_to);
+                console.log(`[SYSTEM] Task ${id} completed manually. XP & Badges processed.`);
+            } catch (error) {
+                console.error('Error in gamification logic during updateTask:', e);
+            }
+        }
+    }
+
 
     if (taskData.assigned_to && taskData.project_id) {
         await Project_Members.findOrCreate({
@@ -101,6 +122,11 @@ async function markCompleted(id) {
     if (!task) {
         return null;
     }
+
+    if (!task.assigned_to) {
+        throw new Error("Cannot complete an unassigned task. Please assign it to someone first.");
+    }
+
     if (task.status === 4) {
         return task;
     }
@@ -109,9 +135,10 @@ async function markCompleted(id) {
     if (task.assigned_to && task.xp_points) {
         try {
             await addXP_checkLevel(task.assigned_to, task.xp_points, Math.floor(task.xp_points / 10));
-            console.log(`Added ${task.xp_points} XP to user ${task.assigned_to}`);
+            await checkUserForBadges(task.assigned_to);
+            console.log(`Added XP and checked badges for user ${task.assigned_to}`);
         } catch (e) {
-            console.error('Error adding XP:', e);
+            console.error('Error adding XP & checking for badges:', e);
         }
     }
 

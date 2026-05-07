@@ -3,5 +3,6 @@ export const LOG_ENTITY_TYPES = {
     PROJECT: 'Project',
     TASK: 'Task',
     COMMENT: 'Comment',
-    FILE: 'File'
+    FILE: 'File',
+    BADGE: 'Badge'
 };

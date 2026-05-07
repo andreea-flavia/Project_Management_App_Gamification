@@ -12,6 +12,8 @@ import UserProfile from './Pages/UserProfile';
 import AuditLogs from './Pages/AuditLogs';
 import Projects from './Pages/Projects';
 import ProjectForm from './Pages/ProjectForm';
+import Leaderboard from './Pages/Leaderboard';
+
 
 
 
@@ -42,6 +44,7 @@ function App() {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects/edit/:id" element={<ProjectForm />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Route>
         </Route>
 

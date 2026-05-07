@@ -171,16 +171,7 @@ const TaskForm = () => {
                     const logsResponse = await api.get(`/logs/${id}`);
                     setLogs(logsResponse.data);
                     alert('Task updated successfully!');
-
-                    setInitialStatus(task.status);
-                    //adaug xp la user
-                    if (task.status === 4 && initialStatus !== 4) {  //daca statusul a fost schimbat la completed, atunci adaug xp, altfel nu
-                        const r = await api.patch(`/user_stats/${user_id}`, {
-                            xp: task.xp_points || 0,
-                            w_coins: task.xp_points ? Math.floor(task.xp_points / 10) : 0  // coins = nr xp / 10
-                        });
-                        console.log('XP update result:', r.data);
-                    }
+                    window.location.reload();
 
                 } else {
                     const response = await api.post('/task', taskToSave);
@@ -194,7 +185,7 @@ const TaskForm = () => {
                 if (error.response?.status === 409) {
                     alert("Attention! This task has been modified by another user. Refresh the page to see the changes!")
                 } else {
-                    alert('Unable to save task.');
+                    alert(error.response?.data?.error || "An error occurred");
                     const m = error.response?.data?.error || 'Error occurred while saving the task';
                     setError(m);
                 }
@@ -400,7 +391,7 @@ const TaskForm = () => {
                                 value={task.xp_points}
                                 onChange={handleChange}
                                 name="xp_points"
-                                disabled={isCompleted || isViewOnly}
+                                disabled={isCompleted || userRole === ROLES.STANDARD}
                             />
                         </div>
 

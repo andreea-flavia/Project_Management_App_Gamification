@@ -13,7 +13,7 @@ const NavMenu = ({ isOpen, onClose }) => {
         { name: 'Home', path: '/home', icon: 'home' },
         { name: 'Tasks', path: '/tasks', icon: 'checklist' },
         { name: 'Projects', path: '/projects', icon: 'account_tree' },
-        { name: 'My Team (Leaderboard)', path: '/team', icon: 'group' },
+        { name: 'My Team (Leaderboard)', path: '/leaderboard', icon: 'group' },
         { name: 'My Progress', path: '/profile', icon: 'account_circle' },
         { name: 'Analytics', path: '/analytics', icon: 'insights' }
 

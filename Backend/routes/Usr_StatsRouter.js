@@ -5,10 +5,24 @@ import {
     updateUserStats,
     deleteUserStats,
     addXP_checkLevel,
-    resertUserStats
+    resertUserStats,
+    getLeaderboardData
 } from '../dataAccess/User_StatsDA.js';
 
 let user_statsRouter = express.Router();
+
+user_statsRouter.route('/user_stats/leaderboard')
+    .get(async (req, res) => {
+        try {
+            const data = await getLeaderboardData();
+            return res.json(data);
+        } catch (error) {
+            console.error("Error fetching leaderboard:", error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    })
+
+
 
 user_statsRouter.route('/user_stats/:user_id')
     .get(async (req, res) => {
@@ -20,29 +34,29 @@ user_statsRouter.route('/user_stats/:user_id')
             return res.status(500).json({ error: error.message });
         }
     })
-    .post(async(req, res) => {
-        try{
+    .post(async (req, res) => {
+        try {
             const stats = await createUserStats(req.body);
             return res.status(201).json(stats);
-        } catch (error){
-            return  res.status(400).json({error: error.message});
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
         }
     })
-    .put(async(req, res) => {
+    .put(async (req, res) => {
         const updated = await updateUserStats(req.params.stats_id, req.body);
-        if(updated) return res.json(updated);
-        return res.status(404).json({error: 'User stats not found'});
+        if (updated) return res.json(updated);
+        return res.status(404).json({ error: 'User stats not found' });
     })
-    .delete(async(req, res) => {
+    .delete(async (req, res) => {
         const deleted = await deleteUserStats(req.params.stats_id);
-        if(deleted) return res.json(deleted);
-        return res.status(404).json({error: 'User stats not found'});
+        if (deleted) return res.json(deleted);
+        return res.status(404).json({ error: 'User stats not found' });
     })
-    .patch(async(req, res) => {  //modifica doar campurile pe care i le trimit
+    .patch(async (req, res) => {  //modifica doar campurile pe care i le trimit
         const { xp, w_coins } = req.body;
         const result = await addXP_checkLevel(req.params.user_id, xp, w_coins);
-        if(result) return res.json(result);
-        return res.status(404).json({error: 'User stats not found'});
+        if (result) return res.json(result);
+        return res.status(404).json({ error: 'User stats not found' });
     });
 
 user_statsRouter.route('/reset_user_stats/:user_id')
@@ -55,5 +69,6 @@ user_statsRouter.route('/reset_user_stats/:user_id')
             return res.status(500).json({ error: error.message });
         }
     });
+
 
 export default user_statsRouter;

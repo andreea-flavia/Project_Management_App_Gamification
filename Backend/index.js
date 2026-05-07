@@ -17,6 +17,7 @@ import nomTT from './routes/Task_TagsRouter.js';
 import userStats from './routes/Usr_StatsRouter.js';
 import auditRouter from './routes/auditRouter.js';
 import projectsRouter from './routes/projectsRouter.js';
+import badgesRouter from './routes/badgesRouter.js';
 
 // Backend\entities\User_Stats.js
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api', nomTT);
 app.use('/api', userStats);
 app.use('/api', auditRouter);
 app.use('/api', projectsRouter);
+app.use('/api', badgesRouter);
 
 let port = process.env.PORT || 9000;
 app.listen(port);

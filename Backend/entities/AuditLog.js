@@ -8,19 +8,19 @@ const AuditLog = db.define('Audit_Log', {
         autoIncrement: true,
         allowNull: false
     },
-    action:{
-        type: Sequelize.ENUM('CREATE', 'UPDATE', 'DELETE','UPLOAD_FILE'),
+    action: {
+        type: Sequelize.ENUM('CREATE', 'UPDATE', 'DELETE', 'UPLOAD_FILE'),
         allowNull: false
     },
-    entity_type:{
-        type: Sequelize.ENUM('User', 'Project', 'Task', 'Comment','File'),
+    entity_type: {
+        type: Sequelize.ENUM('User', 'Project', 'Task', 'Comment', 'File', 'Badge'),
         allowNull: false
     },
-    entity_id:{
+    entity_id: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    user_id : {
+    user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

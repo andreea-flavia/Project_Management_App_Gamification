@@ -6,10 +6,10 @@ import Projects from './Projects.js';
 import Statuses from './Nom_status.js';
 import Priorities from './Nom_priority.js';
 import Nom_Tags from './Nom_tags.js';
-import Tasks_Tags from './Tasks_Tags.js';
 import User_Stats from './User_Stats.js';
 import AuditLog from './AuditLog.js';
 import Project_Members from './Project_Members.js';
+import Nom_Badges from "./Nom_Badges.js";
 
 env.config();
 
@@ -62,6 +62,9 @@ function PK_Config() {
 
     Projects.belongsToMany(Users, { through: Project_Members, foreignKey: 'project_id', as: 'members' });
     Users.belongsToMany(Projects, { through: Project_Members, foreignKey: 'user_id', as: 'projects' });
+
+    Users.belongsToMany(Nom_Badges, { through: 'User_Badges', foreignKey: 'user_id', as: 'badges' });
+    Nom_Badges.belongsToMany(Users, { through: 'User_Badges', foreignKey: 'badge_id', as: 'owners' });
 
     // ------------- 1-1 -------------//
     Users.hasOne(User_Stats, { foreignKey: 'user_id' });

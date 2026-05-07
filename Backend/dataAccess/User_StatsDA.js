@@ -1,4 +1,6 @@
 import User_Stats from '../entities/User_Stats.js';
+import Sequelize from 'sequelize';
+import Users from '../entities/Users.js';
 
 async function createUserStats(userStats) {
     return await User_Stats.create(userStats);
@@ -21,11 +23,11 @@ async function deleteUserStats(user_id) {
     if (!userStats) {
         return null;
     }
-    
+
     return await userStats.destroy();
 }
 
-async function addXP_checkLevel(user_id, xp, w_coins){
+async function addXP_checkLevel(user_id, xp, w_coins) {
     const userStats = await User_Stats.findOne({ where: { user_id } });
     if (!userStats) {
         return null;
@@ -39,7 +41,7 @@ async function addXP_checkLevel(user_id, xp, w_coins){
 
     console.log("User stats before update:", userStats.toJSON());
 
-    while(userStats.xp_points >= userStats.xp_points_req){
+    while (userStats.xp_points >= userStats.xp_points_req) {
         userStats.level += 1;
         userStats.xp_points = userStats.xp_points - userStats.xp_points_req;
         // Formula pentru nivelul următor: 100 * (level următor)^2
@@ -75,11 +77,45 @@ async function resertUserStats(user_id) {
     return userStats;
 }
 
+async function getLeaderboardData() {
+    return await Users.findAll(
+        {
+            attributes: [
+                'user_id',
+                'username',
+                'picture_url',
+                [
+                    Sequelize.literal(`(
+                        select COUNT(*)
+                        from Tasks AS task
+                        where task.assigned_to = Users.user_id and task.status = 4
+                    )`),
+                    'completedTasksCount'
+                ],
+                [
+                    Sequelize.literal(`(
+                        select COUNT(*)
+                        from User_Badges AS ub
+                        where ub.user_id = Users.user_id
+                    )`),
+                    'badgesCount'
+                ]
+            ],
+            include: [{
+                model: User_Stats,
+                attributes: ['level', 'total_xp_points']
+            }],
+            order: [[User_Stats, 'total_xp_points', 'DESC']],
+            limit: 15
+        });
+}
+
 export {
     createUserStats,
     getUserStatsByUserId,
     updateUserStats,
     deleteUserStats,
     addXP_checkLevel,
-    resertUserStats
+    resertUserStats,
+    getLeaderboardData
 };

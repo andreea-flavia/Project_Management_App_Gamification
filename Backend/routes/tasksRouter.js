@@ -59,7 +59,7 @@ tasksRouter.route('/task/:id')
     })
     .put(async (req, res) => {
         try {
-            
+
             const taskDB = await getTaskById(req.params.id);
             if (req.user.role === ROLES.STANDARD) {
                 if (!taskDB)
@@ -74,7 +74,7 @@ tasksRouter.route('/task/:id')
             }
 
             const task_upd = await updateTask(req.params.id, req.body);
-            if (task_upd){
+            if (task_upd) {
                 await logAction(req.user.userId, LOG_ACTIONS.UPDATE, LOG_ENTITY_TYPES.TASK, task_upd.task_id, { previous: taskDB, updated: task_upd });
                 return res.json(task_upd);
             }
@@ -82,12 +82,12 @@ tasksRouter.route('/task/:id')
         } catch (error) {
 
             console.error("Error in PUT /task/:id :", error);
-            return res.status(500).json({ error: 'Server error during task update' });
+            res.status(400).json({ error: error.message });
         }
     })
     .delete(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
         const task_del = await deleteTask(req.params.id);
-        if (task_del){
+        if (task_del) {
             await logAction(req.user.userId, LOG_ACTIONS.DELETE, LOG_ENTITY_TYPES.TASK, task_del.task_id, task_del);
             return res.json(task_del);
         }
