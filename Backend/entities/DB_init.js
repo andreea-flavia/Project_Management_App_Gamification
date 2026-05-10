@@ -10,6 +10,7 @@ import User_Stats from './User_Stats.js';
 import AuditLog from './AuditLog.js';
 import Project_Members from './Project_Members.js';
 import Nom_Badges from "./Nom_Badges.js";
+import Notifications from "./Notifications.js";
 
 env.config();
 
@@ -54,6 +55,9 @@ function PK_Config() {
 
     Users.hasMany(AuditLog, { foreignKey: 'user_id' });
     AuditLog.belongsTo(Users, { foreignKey: 'user_id' });
+
+    Users.hasMany(Notifications, { foreignKey: 'user_id' });
+    Notifications.belongsTo(Users, { foreignKey: 'user_id' });
 
 
     //------------- n-n -------------//

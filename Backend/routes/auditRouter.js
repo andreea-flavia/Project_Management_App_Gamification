@@ -1,5 +1,7 @@
 
 import express from 'express';
+import { ROLES } from '../constants/roles.js';
+import verifyRole from '../Middleware/verifyRole.js';
 
 
 import { getAuditLogs, getAuditLogsByentityId } from '../dataAccess/AuditLogDA.js';
@@ -7,7 +9,7 @@ import { getAuditLogs, getAuditLogsByentityId } from '../dataAccess/AuditLogDA.j
 let auditRouter = express.Router();
 
 auditRouter.route('/logs')
-    .get(async (req, res) => {
+    .get(verifyRole(ROLES.ADMIN), async (req, res) => {
         try {
             const logs = await getAuditLogs();
             return res.json(logs);
@@ -18,7 +20,7 @@ auditRouter.route('/logs')
     });
 
 auditRouter.route('/logs/:entity_id')
-    .get(async (req, res) => {
+    .get(verifyRole(ROLES.ADMIN), async (req, res) => {
         try {
             const logs = await getAuditLogsByentityId(req.params.entity_id);
             return res.json(logs);
@@ -28,4 +30,4 @@ auditRouter.route('/logs/:entity_id')
         }
     });
 
-export default auditRouter;
+export default auditRouter; 

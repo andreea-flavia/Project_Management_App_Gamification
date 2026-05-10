@@ -162,25 +162,22 @@ const UserProfile = () => {
                     </div>
                 </div>
 
-                <div class="acc_s4">
-                    Badges
-                    {/* <p>Hello World - Primul task completat</p>
-                    <p>Code Deity - peste 100 de taskuri</p>
-
-                    <p>First Aid - primul task cu BUG</p>
-                    <p>Pest Control - 5 taskuri cu BUG</p>
-                    <p>The Exorcist - 15 taskuri cu BUG</p>
-                    <p>Zero Bug Policy - 30 taskuri cu BUG</p>
-
-                    <p>Hello World Plus - primul task cu FEATURE</p>
-                    <p>Bricklayer - 5 taskuri cu FEATURE</p>
-                    <p>Architect in Training - 15 taskuri cu FEATURE</p>
-                    <p>Feature Factory - 30 taskuri cu FEATURE</p>
-
-                    <p>Refactor Rookie - primul task cu IMPROVEMENT</p>
-                    <p>Performance Tuner - 5 taskuri cu IMPROVEMENT</p>
-                    <p>Clean Code Apostle - 15 taskuri cu IMPROVEMENT</p>
-                    <p>The Optimizer - 30 taskuri cu IMPROVEMENT</p> */}
+                <div className="acc_s4">
+                    <p className="s2_acc_bento_label">OPERATIVE BADGES</p>
+                    <div className="badges_container">
+                        {user?.badges && user.badges.length > 0 ? (
+                            user.badges.map((badge, index) => (
+                                <div key={index} className="badge_item" title={badge.description}>
+                                    <div className="badge_icon_wrapper">
+                                        {badge.icon || '+'}
+                                    </div>
+                                    <span className="badge_name">{badge.name}</span>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="no_badges_text">No badges awarded yet. Complete tasks to unlock</p>
+                        )}
+                    </div>
                 </div>
             </section>
 
@@ -192,7 +189,7 @@ const UserProfile = () => {
                                 <h3 className="audit_title">System Audit Log</h3>
                             </div>
                             <p className="audit_description">
-                                Review all security events, data modifications, and access history associated with this operative identity.
+                                Review all security events, data modifications, and access all tasks, projects and users history.
                             </p>
                         </div>
                         <button className="audit_action_btn" onClick={() => navigate('/audit')} >
@@ -208,5 +205,23 @@ const UserProfile = () => {
     )
 }
 
-export default UserProfile
+export default UserProfile;
 
+
+{/* <p>Hello World - Primul task completat</p>
+<p>Code Deity - peste 100 de taskuri</p>
+
+<p>First Aid - primul task cu BUG</p>
+<p>Pest Control - 5 taskuri cu BUG</p>
+<p>The Exorcist - 15 taskuri cu BUG</p>
+<p>Zero Bug Policy - 30 taskuri cu BUG</p>
+
+<p>Hello World Plus - primul task cu FEATURE</p>
+<p>Bricklayer - 5 taskuri cu FEATURE</p>
+<p>Architect in Training - 15 taskuri cu FEATURE</p>
+<p>Feature Factory - 30 taskuri cu FEATURE</p>
+
+<p>Refactor Rookie - primul task cu IMPROVEMENT</p>
+<p>Performance Tuner - 5 taskuri cu IMPROVEMENT</p>
+<p>Clean Code Apostle - 15 taskuri cu IMPROVEMENT</p>
+<p>The Optimizer - 30 taskuri cu IMPROVEMENT</p> */}

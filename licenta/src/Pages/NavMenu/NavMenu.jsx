@@ -1,9 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import './NavMenu.css';
+import { ROLES } from '../../constants/roles.js';
 
 const NavMenu = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
+    const userRole = localStorage.getItem('user_role');
+    const hasAccessToAnalytics = userRole === ROLES.ADMIN || userRole === ROLES.MANAGER;
 
     if (!isOpen) {
         return null;
@@ -15,8 +18,7 @@ const NavMenu = ({ isOpen, onClose }) => {
         { name: 'Projects', path: '/projects', icon: 'account_tree' },
         { name: 'My Team (Leaderboard)', path: '/leaderboard', icon: 'group' },
         { name: 'My Progress', path: '/profile', icon: 'account_circle' },
-        { name: 'Analytics', path: '/analytics', icon: 'insights' }
-
+        ...(hasAccessToAnalytics ? [{ name: 'Analytics', path: '/analytics', icon: 'insights' }] : [])
     ];
 
     const handleNavigation = (path) => {

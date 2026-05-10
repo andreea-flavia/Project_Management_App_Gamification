@@ -58,6 +58,14 @@ const AuditLogs = () => {
     const currentItems = sortedLogs.slice(indexOfFirstItem, indexOfLastItem);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const formatDetails = (detailsString) => {
+        try {
+            return JSON.stringify(JSON.parse(detailsString), null, 2);
+        } catch (e) {
+            return detailsString;
+        }
+    };
+
 
     return (
         <div className="audit_page_container">
@@ -186,7 +194,7 @@ const AuditLogs = () => {
                                             {log.details ? (
                                                 <details>
                                                     <summary>See data</summary>
-                                                    <pre>{JSON.stringify(JSON.parse(log.details), null, 2)}</pre>
+                                                    <pre>{formatDetails(log.details)}</pre>
                                                 </details>
                                             ) : (
                                                 <span className="no_details">No logs yet.</span>

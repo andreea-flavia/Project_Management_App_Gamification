@@ -5,6 +5,7 @@ import Nom_Tags from '../entities/Nom_tags.js';
 import { addXP_checkLevel } from './User_StatsDA.js';
 import Project_Members from '../entities/Project_Members.js';
 import { checkUserForBadges } from './Nom_BadgesDA.js';
+import { createNotification } from './notificationsDA.js';
 
 
 
@@ -15,6 +16,16 @@ async function createTask(task) {
         }
         const tags = task.tags;
         const newTask = await Tasks.create(task);
+
+        if (newTask.assigned_to) {
+            await createNotification(
+                newTask.assigned_to,
+                "Task Assigned",
+                `New operative task: ${newTask.task_title}`,
+                "TASK_ASSIGNED"
+            );
+        }
+
         if (task.assigned_to && task.project_id) {
             await Project_Members.findOrCreate({
                 where: {
@@ -71,6 +82,16 @@ async function updateTask(id, taskData) {
 
     if (taskData.status === 4 && !finalAssignedTo) {
         throw new Error("Cannot complete a task without an assignee.");
+    }
+
+    const oldAssignee = task.assigned_to;
+    if (taskData.assigned_to && taskData.assigned_to !== oldAssignee) {
+        await createNotification(
+            taskData.assigned_to,
+            "New Task Assigned",
+            `You have been reassigned to task: # ${task.task_id} ${task.task_title}`,
+            "TASK_ASSIGNED"
+        );
     }
 
     const { tags, ...fields } = taskData;

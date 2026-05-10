@@ -7,6 +7,7 @@ import { Op, Sequelize } from "sequelize";
 import { logAction } from "./AuditLogDA.js";
 import { LOG_ENTITY_TYPES } from '../constants/log_entity_type.js';
 import { LOG_ACTIONS } from '../constants/log_action.js';
+import { createNotification } from './notificationsDA.js';
 
 async function createBadge(data) {
     return await Nom_Badges.create(data);
@@ -52,6 +53,14 @@ async function getUserBadges(userId) {
 }
 
 async function awardBadgeToUser(userId, badgeId) {
+    const badge = await Nom_Badges.findByPk(badgeId);
+    const badgeName = badge ? badge.name : "New Badge";
+    await createNotification(
+        userId,
+        "Honors Awarded",
+        `You have earned the badge: ${badgeName}`,
+        "BADGE_EARNED"
+    );
     return await User_Badges.create({
         user_id: userId,
         badge_id: badgeId,

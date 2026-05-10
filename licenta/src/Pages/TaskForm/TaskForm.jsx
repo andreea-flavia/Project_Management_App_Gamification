@@ -22,7 +22,8 @@ const TaskForm = () => {
         tags: [],
         xp_points: 0,
         start_date: getToday(),
-        end_date: getTomorrow()
+        end_date: getTomorrow(),
+        project_id: 6
     });
     // const [loading] = useState(true);
     const { id } = useParams();
@@ -400,7 +401,7 @@ const TaskForm = () => {
                             <select
                                 className='s1_input'
                                 name="project_id"
-                                value={task.project_id || 6}
+                                value={task.project_id || ''}
                                 onChange={handleChange}
                                 disabled={isCompleted || userRole === ROLES.STANDARD}
                             >

@@ -13,6 +13,7 @@ import AuditLogs from './Pages/AuditLogs';
 import Projects from './Pages/Projects';
 import ProjectForm from './Pages/ProjectForm';
 import Leaderboard from './Pages/Leaderboard';
+import Analytics from './Pages/Analytics';
 
 
 
@@ -36,6 +37,7 @@ function App() {
             <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.MANAGER]} />}>
               <Route path="/tasks/new" element={<TaskForm />} />
               <Route path="/projects/new" element={<ProjectForm />} />
+              <Route path="/analytics" element={<Analytics />} />
             </Route>
             <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
               <Route path="/audit" element={<AuditLogs />} />

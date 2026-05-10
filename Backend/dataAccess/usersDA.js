@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import Users from '../entities/Users.js';
 import User_Stats from '../entities/User_Stats.js';
+import Nom_Badges from '../entities/Nom_Badges.js';
 
 async function createUser(user) {
     try {
@@ -40,7 +41,12 @@ async function getUsers() {
 
 async function getUserById(id) {
     return await Users.findByPk(id, {
-        attributes: { exclude: ['user_password_hash'] }
+        attributes: { exclude: ['user_password_hash'] },
+        include: [{
+            model: Nom_Badges,
+            as: 'badges',
+            through: { attributes: [] }
+        }]
     });
 }
 
