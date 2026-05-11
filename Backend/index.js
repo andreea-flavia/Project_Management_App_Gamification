@@ -19,6 +19,8 @@ import auditRouter from './routes/auditRouter.js';
 import projectsRouter from './routes/projectsRouter.js';
 import badgesRouter from './routes/badgesRouter.js';
 import analyticsRouter from './routes/analyticsRouter.js';
+import notificationRouter from './routes/notificationRouter.js';
+import prizesRouter from './routes/prizesRouter.js';
 
 // Backend\entities\User_Stats.js
 const app = express();
@@ -44,6 +46,8 @@ app.use('/api', auditRouter);
 app.use('/api', projectsRouter);
 app.use('/api', badgesRouter);
 app.use('/api', analyticsRouter);
+app.use('/api', notificationRouter);
+app.use('/api', prizesRouter);
 
 let port = process.env.PORT || 9000;
 app.listen(port);

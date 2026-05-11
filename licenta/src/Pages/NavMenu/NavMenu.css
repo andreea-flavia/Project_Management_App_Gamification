@@ -105,3 +105,40 @@
     justify-content: center;
     width: 100%;
 }
+
+
+.menu_actions .close_btn,
+.menu_actions .logout_btn,
+.menu_actions .analytics_btn {
+    flex: 1;
+    max-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 1px solid var(--secondary);
+    background: transparent;
+    color: var(--secondary);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+.menu_actions button:hover {
+    background: var(--secondary);
+    color: var(--bg);
+}
+
+.analytics_btn {
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
+
+.analytics_btn:hover {
+    background: var(--primary) !important;
+    color: var(--bg) !important;
+}

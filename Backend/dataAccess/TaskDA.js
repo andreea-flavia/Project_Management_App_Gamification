@@ -6,7 +6,7 @@ import { addXP_checkLevel } from './User_StatsDA.js';
 import Project_Members from '../entities/Project_Members.js';
 import { checkUserForBadges } from './Nom_BadgesDA.js';
 import { createNotification } from './notificationsDA.js';
-
+import Users from '../entities/Users.js';
 
 
 async function createTask(task) {
@@ -21,8 +21,9 @@ async function createTask(task) {
             await createNotification(
                 newTask.assigned_to,
                 "Task Assigned",
-                `New operative task: ${newTask.task_title}`,
-                "TASK_ASSIGNED"
+                `New operative task: #${newTask.task_id} ${newTask.task_title}`,
+                "TASK_ASSIGNED",
+                newTask.task_id
             );
         }
 
@@ -56,7 +57,10 @@ async function getTasks() {
 
 async function getTaskById(id) {
     return await Tasks.findByPk(id, {
-        include: [{ model: Nom_Tags, as: 'tags', through: { attributes: [] } }]
+        include: [
+            { model: Nom_Tags, as: 'tags', through: { attributes: [] } },
+            { model: Users, as: 'assignedUser' }
+        ]
     });
 }
 
@@ -89,8 +93,9 @@ async function updateTask(id, taskData) {
         await createNotification(
             taskData.assigned_to,
             "New Task Assigned",
-            `You have been reassigned to task: # ${task.task_id} ${task.task_title}`,
-            "TASK_ASSIGNED"
+            `You have been reassigned to task: #${task.task_id} ${task.task_title}`,
+            "TASK_ASSIGNED",
+            id
         );
     }
 

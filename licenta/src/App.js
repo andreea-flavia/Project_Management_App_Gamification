@@ -14,6 +14,7 @@ import Projects from './Pages/Projects';
 import ProjectForm from './Pages/ProjectForm';
 import Leaderboard from './Pages/Leaderboard';
 import Analytics from './Pages/Analytics';
+import Shop from './Pages/Shop';
 
 
 
@@ -47,6 +48,7 @@ function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects/edit/:id" element={<ProjectForm />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/shop" element={<Shop />} />
           </Route>
         </Route>
 

@@ -130,7 +130,7 @@ const UserProfile = () => {
                         <div className='s2_column'>
                             <p className="s2_acc_bento_label">W Coins</p>
                             <h3 className="acc_bento_value_large">{stats?.w_coins || 0}</h3>
-                            <button className="s2_btn_redeem_reward">CLAIM REWARDS</button>
+                            <button className="s2_btn_redeem_reward" onClick={() => navigate('/shop')}>REDEEM REWARDS</button>
                         </div>
                         <div className='s2_column'>
                             <p className="s2_acc_bento_label">TOTAL TASKS COMPLETED</p>

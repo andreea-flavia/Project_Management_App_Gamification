@@ -55,8 +55,14 @@ const TaskForm = () => {
                     setSelectedTagIds(r.data.tags?.map(tag => tag.tag_id) || []);
                     setInitialStatus(r.data.status);
 
-                    const logsResponse = await api.get(`/logs/${id}`);
-                    setLogs(logsResponse.data);
+                    if (userRole === ROLES.ADMIN) {
+                        try {
+                            const logsResponse = await api.get(`/logs/${id}`);
+                            setLogs(logsResponse.data);
+                        } catch (e) {
+                            console.error("Error fetching logs:", e);
+                        }
+                    }
                 }
                 try {
                     const statusRes = await api.get('/statuses/TASK');
@@ -82,11 +88,13 @@ const TaskForm = () => {
                 } catch (e) {
                     console.error('Error fetching projects:', e);
                 }
-                try {
-                    const usersRes = await api.get('/user');
-                    setUsers(usersRes.data);
-                } catch (e) {
-                    console.error('Error fetching users:', e);
+                if (userRole === ROLES.ADMIN || userRole === ROLES.MANAGER) {
+                    try {
+                        const usersRes = await api.get('/user');
+                        setUsers(usersRes.data);
+                    } catch (e) {
+                        console.error('Error fetching users:', e);
+                    }
                 }
             } catch (e) {
                 console.error('Error fetching task data:', e);
@@ -429,6 +437,11 @@ const TaskForm = () => {
                                         {user.username}
                                     </option>
                                 ))}
+                                {userRole === ROLES.STANDARD && task.assigned_to && !users.find(u => u.user_id === task.assigned_to) && (
+                                    <option value={task.assigned_to}>
+                                        {task.assignedUser?.username || `Operative #${task.assigned_to}`}
+                                    </option>
+                                )}
                             </select>
                         </div>
 

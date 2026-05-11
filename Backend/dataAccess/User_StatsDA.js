@@ -1,6 +1,7 @@
 import User_Stats from '../entities/User_Stats.js';
 import Sequelize from 'sequelize';
 import Users from '../entities/Users.js';
+import { createNotification } from './notificationsDA.js';
 
 async function createUserStats(userStats) {
     return await User_Stats.create(userStats);
@@ -52,6 +53,17 @@ async function addXP_checkLevel(user_id, xp, w_coins) {
     console.log("User stats after update:", userStats.toJSON());
 
     await userStats.save();
+
+    if (lvlUp) {
+        await createNotification(
+            user_id,
+            "Promotion Secured!",
+            `Operative, you have reached Level ${userStats.level}. Efficiency increasing.`,
+            "LEVEL_UP",
+            user_id
+        );
+    }
+
 
     return {
         level: userStats.level,

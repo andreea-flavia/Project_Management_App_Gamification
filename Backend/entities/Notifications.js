@@ -24,12 +24,16 @@ const Notifications = db.define('Notifications', {
         allowNull: false
     },
     type: {
-        type: Sequelize.ENUM('TASK_ASSIGNED', 'TASK_UPDATED', 'BADGE_EARNED', 'PROJECT_UPDATED', 'SYSTEM'),
+        type: Sequelize.ENUM('TASK_ASSIGNED', 'TASK_UPDATED', 'BADGE_EARNED', 'PROJECT_UPDATED', 'SYSTEM', 'LEVEL_UP'),
         defaultValue: 'SYSTEM'
     },
     is_read: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
+    },
+    resource_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true
     }
 }, {
     timestamps: true

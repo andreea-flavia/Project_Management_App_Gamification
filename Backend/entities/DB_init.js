@@ -11,6 +11,8 @@ import AuditLog from './AuditLog.js';
 import Project_Members from './Project_Members.js';
 import Nom_Badges from "./Nom_Badges.js";
 import Notifications from "./Notifications.js";
+import Nom_Prizes from './Nom_Prizes.js';
+import User_Purchases from './User_Purchases.js';
 
 env.config();
 
@@ -34,8 +36,8 @@ function DB_Create() {
 
 function PK_Config() {
     //------------- 1-n -------------//
-    Users.hasMany(Tasks, { foreignKey: 'assigned_to' });
-    Tasks.belongsTo(Users, { foreignKey: 'assigned_to' });
+    Users.hasMany(Tasks, { foreignKey: 'assigned_to', as: 'assignedTasks' });
+    Tasks.belongsTo(Users, { foreignKey: 'assigned_to', as: 'assignedUser' });
 
     Projects.hasMany(Tasks, { foreignKey: 'project_id' });
     Tasks.belongsTo(Projects, { foreignKey: 'project_id' });
@@ -59,6 +61,12 @@ function PK_Config() {
     Users.hasMany(Notifications, { foreignKey: 'user_id' });
     Notifications.belongsTo(Users, { foreignKey: 'user_id' });
 
+    User_Purchases.belongsTo(Users, { foreignKey: 'user_id' });
+    Users.hasMany(User_Purchases, { foreignKey: 'user_id', as: 'userPurchases' });
+
+    Nom_Prizes.hasMany(User_Purchases, { foreignKey: 'prize_id', as: 'prizeOrders' });
+    User_Purchases.belongsTo(Nom_Prizes, { foreignKey: 'prize_id' });
+
 
     //------------- n-n -------------//
     Tasks.belongsToMany(Nom_Tags, { through: 'Tasks_Tags', foreignKey: 'task_id', as: 'tags' });
@@ -69,6 +77,9 @@ function PK_Config() {
 
     Users.belongsToMany(Nom_Badges, { through: 'User_Badges', foreignKey: 'user_id', as: 'badges' });
     Nom_Badges.belongsToMany(Users, { through: 'User_Badges', foreignKey: 'badge_id', as: 'owners' });
+
+    Users.belongsToMany(Nom_Prizes, { through: 'User_Purchases', foreignKey: 'user_id', as: 'purchasedPrizes' });
+    Nom_Prizes.belongsToMany(Users, { through: 'User_Purchases', foreignKey: 'prize_id', as: 'buyers' });
 
     // ------------- 1-1 -------------//
     Users.hasOne(User_Stats, { foreignKey: 'user_id' });

@@ -18,7 +18,8 @@ const NavMenu = ({ isOpen, onClose }) => {
         { name: 'Projects', path: '/projects', icon: 'account_tree' },
         { name: 'My Team (Leaderboard)', path: '/leaderboard', icon: 'group' },
         { name: 'My Progress', path: '/profile', icon: 'account_circle' },
-        ...(hasAccessToAnalytics ? [{ name: 'Analytics', path: '/analytics', icon: 'insights' }] : [])
+        { name: 'Shop', path: '/shop', icon: 'storefront' },
+        // ...(hasAccessToAnalytics ? [{ name: 'Analytics', path: '/analytics', icon: 'insights' }] : [])
     ];
 
     const handleNavigation = (path) => {
@@ -51,9 +52,13 @@ const NavMenu = ({ isOpen, onClose }) => {
                 </div>
                 <div className="menu_actions">
                     <button className="close_btn" onClick={onClose}>{'<<'} Back</button>
-                    <button className="logout_btn" onClick={handleLogout}>
-                        Log Out {'>>'}
-                    </button>
+                    {hasAccessToAnalytics && (
+                        <button className="nav_footer_btn analytics_btn" onClick={() => handleNavigation('/analytics')}>
+                            <span className="material-symbols-outlined">insights</span>
+                            ANALYTICS
+                        </button>
+                    )}
+                    <button className="logout_btn" onClick={handleLogout}> Log Out {'>>'}  </button>
                 </div>
 
             </div>

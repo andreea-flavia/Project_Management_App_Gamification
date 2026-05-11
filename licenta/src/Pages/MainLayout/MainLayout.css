@@ -89,3 +89,44 @@
     letter-spacing: 2px;
     opacity: 0.8;
 }
+
+
+.notif_btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.notif_btn:hover {
+    transform: scale(1.1);
+}
+
+.notif_btn .material-symbols-outlined {
+    font-size: 30px;
+    color: var(--primary);
+}
+
+.notif_badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--secondary);
+    color: white;
+    font-size: 7px;
+    font-family: var(--font-mono);
+    font-weight: 900;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 2px solid #fff; */
+}

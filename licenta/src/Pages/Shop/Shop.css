@@ -1,0 +1,285 @@
+.shop_main {
+    padding: 80px 40px;
+    max-width: 1500px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background-color: var(--bg);
+    font-family: var(--font-mono);
+}
+
+.shop_header_wrapper {
+    margin-bottom: 64px;
+    padding-top: 20px;
+}
+
+.shop_header_flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 32px;
+    width: 100%;
+}
+
+.shop_header_title {
+    flex: 1;
+    max-width: 670px;
+}
+
+.shop_tagline {
+    color: var(--primary, #00D135);
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.shop_title {
+    font-family: var(--font-mono);
+    font-size: clamp(3rem, 10vw, 4.5rem);
+    font-weight: 900;
+    color: var(--on-surface, #fff);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    text-transform: uppercase;
+    /* font-style: italic; */
+    margin: 0;
+}
+
+.shop_gradient_text {
+    background: var(--primary);
+}
+
+.shop_description {
+    margin-top: 24px;
+    color: var(--on-surface-variant, #a0a0a0);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+
+
+.shop_balance_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.shop_balance_group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.shop_balance_label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--on-surface-variant);
+    opacity: 0.6;
+}
+
+.shop_balance_value_row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.shop_coin_icon {
+    color: var(--primary);
+    font-size: 24px;
+    font-variation-settings: 'FILL' 1;
+}
+
+.shop_balance_amount {
+    font-family: var(--font-mono);
+    font-size: 36px;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    color: var(--on-surface, #fff);
+    letter-spacing: -0.05em;
+}
+
+.shop_text_primary {
+    color: var(--primary, #00D135);
+}
+
+/*  shop section */
+
+.shop_section {
+    margin-bottom: 48px;
+}
+
+/* Header Sectiune */
+.shop_section_header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.shop_title_group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+
+.shop_section_title {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--on-surface);
+}
+
+.shop_header_line {
+    flex: 1;
+    height: 2px;
+    background: var(--on-surface);
+    margin-left: 32px;
+    opacity: 0.3;
+}
+
+.shop_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+
+/*  card  */
+.shop_card {
+    background: #fff;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 2px solid var(--primary);
+    transition: all 0.3s ease;
+    height: fit-content;
+}
+
+.shop_card:hover {
+    border-color: var(--secondary);
+    transform: translateY(-5px);
+}
+
+.shop_flex_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shop_icon {
+    color: var(--primary-container);
+    font-size: 28px;
+}
+
+.shop_name {
+    font-size: 16px;
+    margin: 0;
+}
+
+.shop_description_text {
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+    overflow: hidden;
+}
+
+
+.shop_price {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+
+.shop_btn {
+    width: 100%;
+    padding: 8px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    background: transparent;
+    border: 1px solid #cecbcb;
+    color: var(--on-surface);
+    font-size: 11px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+
+/* ?inventory */
+
+.inventory_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.inventory_card {
+    background: #fff;
+    padding: 16px;
+    border: 2px solid var(--primary);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.inventory_card:hover {
+    transform: translateY(-7px);
+}
+
+.inventory_card.expired {
+    opacity: 0.5;
+    border-left-color: #ec306f;
+}
+
+.inv_header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.inv_name {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--on-surface);
+}
+
+.status_badge {
+    font-size: 9px;
+    padding: 2px 6px;
+    background: rgba(0, 209, 53, 0.1);
+    color: var(--primary);
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.inv_details {
+    font-size: 12px;
+    color: var(--on-surface-variant);
+}
+
+.inv_stat {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+}

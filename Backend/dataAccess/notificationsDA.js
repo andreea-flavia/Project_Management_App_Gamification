@@ -1,10 +1,11 @@
 import Notifications from '../entities/Notifications.js';
-async function createNotification(userId, title, message, type) {
+async function createNotification(userId, title, message, type, resourceId) {
     return await Notifications.create({
         user_id: userId,
         title,
         message,
-        type
+        type,
+        resource_id: resourceId
     });
 }
 
