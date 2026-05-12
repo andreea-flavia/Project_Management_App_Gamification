@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../api';
 import './Shop.css';
 
@@ -9,7 +9,7 @@ const Shop = () => {
     const user_id = localStorage.getItem("user_id");
     const [myPrizes, setMyPrizes] = useState([]);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             setLoading(true);
             const [prizesRes, statsRes, myPrizesRes] = await Promise.all([
@@ -25,11 +25,11 @@ const Shop = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user_id]);
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     const handleBuy = async (prizeId, cost) => {
         if (userCoins < cost) {
@@ -47,6 +47,17 @@ const Shop = () => {
         }
     };
 
+    const handleUse = async (purchaseId) => {
+        try {
+            await api.post(`/prizes/use/${purchaseId}`);
+            fetchData();
+            alert("Voucher activated! Check your inventory for the code.");
+        } catch (error) {
+            console.error("Error using voucher:", error);
+            alert(error.response?.data?.error || "Failed to use voucher");
+        }
+    }
+
     const ShopCard = ({ prize, onBuy }) => (
         <div className='shop_card'>
             <div className="shop_flex_row">
@@ -55,7 +66,7 @@ const Shop = () => {
             <h4 className="shop_name">{prize.name}</h4>
             <p className="shop_description_text">{prize.description}</p>
             <div className="shop_price">
-                {prize.cost} WC
+                {prize.cost} W-Coins
             </div>
             <button className="shop_btn" onClick={() => onBuy(prize.prize_id, prize.cost)}>
                 ACQUIRE
@@ -92,6 +103,7 @@ const Shop = () => {
                     <span className="status_badge">{item.status}</span>
                 </div>
             </div>
+
             <div className="inv_details">
                 {item.uses_left !== null && (
                     <div className="inv_stat">
@@ -99,15 +111,34 @@ const Shop = () => {
                         <span className="value">{item.uses_left} uses</span>
                     </div>
                 )}
+                {item.redemption_code && (
+                    <div className="redemption_area">
+                        <div className="code_display">
+                            <span className="label">REDEMPTION CODE:</span>
+                            <span className="code_value">{item.redemption_code}</span>
+                        </div>
+                    </div>
+                )}
                 {item.expiry_date && (
                     <div className="inv_stat">
                         <span className="label">Expires:</span>
-                        <span className="value">{new Date(item.expiry_date).toLocaleDateString()}</span>
+                        <span className="value">
+                            {new Date(item.expiry_date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                        </span>
                     </div>
+                )}
+                {item.status === 'ACTIVE' && item.Nom_Prize?.type === 'VOUCHER' && (
+                    <button
+                        className="inv_use_btn"
+                        onClick={() => handleUse(item.purchase_id)}
+                    >
+                        ACTIVATE VOUCHER
+                    </button>
                 )}
             </div>
         </div>
     );
+
 
 
 
@@ -180,62 +211,6 @@ const Shop = () => {
                     )}
                 </div>
             </section>
-
-
-            {/* ------------------------ */}
-            {/* <div className="shop_header">
-                <h1>REWARD TERMINAL</h1>
-                <div className="coin_balance">
-                    <span className="material-symbols-outlined">monetization_on</span>
-                    {userCoins} W-COINS
-                </div>
-            </div>
-            <section className="shop_category">
-                <h2><span className="material-symbols-outlined">confirmation_number</span> OFFICE VOUCHERS</h2>
-                <div className="prizes_grid">
-                    {prizes.filter(p => p.type === 'VOUCHER').map(prize => (
-                        <PrizeCard key={prize.prize_id} prize={prize} onBuy={handleBuy} />
-                    ))}
-                </div>
-            </section>
-            <section className="shop_category">
-                <h2><span className="material-symbols-outlined">bolt</span> POWER-UPS & BOOSTERS</h2>
-                <div className="prizes_grid">
-                    {prizes.filter(p => p.type === 'BOOSTER').map(prize => (
-                        <PrizeCard key={prize.prize_id} prize={prize} onBuy={handleBuy} />
-                    ))}
-                </div>
-            </section>
-            <section className="shop_category">
-                <h2><span className="material-symbols-outlined">palette</span> COSMETICS & STYLE</h2>
-                <div className="prizes_grid">
-                    {prizes.filter(p => p.type === 'STYLE').map(prize => (
-                        <PrizeCard key={prize.prize_id} prize={prize} onBuy={handleBuy} />
-                    ))}
-                </div>
-            </section>
-            <div className="inventory_section">
-                <h2><span className="material-symbols-outlined">inventory_2</span> MY INVENTORY</h2>
-                <div className="inventory_grid">
-                    {myPrizes.length === 0 ? (
-                        <p className="no_items">No items purchased yet.</p>
-                    ) : (
-                        myPrizes.map(item => (
-                            <div key={item.purchase_id} className={`inventory_card ${item.status.toLowerCase()}`}>
-                                <div className="inv_header">
-                                    <span className="material-symbols-outlined">{item.Nom_Prize?.icon}</span>
-                                    <span>{item.Nom_Prize?.name}</span>
-                                </div>
-                                <div className="inv_details">
-                                    {item.uses_left !== null && <p>Uses left: {item.uses_left}</p>}
-                                    {item.expiry_date && <p>Expires: {new Date(item.expiry_date).toLocaleDateString()}</p>}
-                                    <span className="status_label">{item.status}</span>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div> */}
         </div>
     );
 }

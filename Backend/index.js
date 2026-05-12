@@ -21,6 +21,9 @@ import badgesRouter from './routes/badgesRouter.js';
 import analyticsRouter from './routes/analyticsRouter.js';
 import notificationRouter from './routes/notificationRouter.js';
 import prizesRouter from './routes/prizesRouter.js';
+import dashboardRouter from './routes/dashboardRouter.js';
+
+import { checkMissedDeadlines } from './dataAccess/TaskDA.js';
 
 // Backend\entities\User_Stats.js
 const app = express();
@@ -36,6 +39,7 @@ app.use('/api', usersRouter);
 
 app.use('/api', verifToken);
 
+app.use('/api', dashboardRouter);
 app.use('/api', tasksRouter);
 app.use('/api', nomStatusRouter);
 app.use('/api', nomPriorityRouter);
@@ -50,8 +54,11 @@ app.use('/api', notificationRouter);
 app.use('/api', prizesRouter);
 
 let port = process.env.PORT || 9000;
-app.listen(port);
+// app.listen(port);
 console.log(`Serverul ruleaza pe portul ${port}`);
+
+checkMissedDeadlines();
+setInterval(checkMissedDeadlines, 60 * 60 * 1000);
 
 app.listen(port, () => {
     console.log(`Verifica baza de date la: http://localhost:${port}/api/create`);

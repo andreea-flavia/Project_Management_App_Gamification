@@ -221,6 +221,12 @@
     font-size: 11px;
     font-weight: 900;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shop_btn:hover {
+    border-color: var(--secondary);
+    background: var(--secondary);
 }
 
 
@@ -264,14 +270,27 @@
     color: var(--on-surface);
 }
 
-.status_badge {
-    font-size: 9px;
-    padding: 2px 6px;
-    background: rgba(0, 209, 53, 0.1);
-    color: var(--primary);
-    border-radius: 4px;
-    text-transform: uppercase;
+.inventory_card.active .status_badge {
+    background: rgba(0, 255, 127, 0.1);
+    color: #00ff7f;
+    border: 1px solid rgba(0, 255, 127, 0.3);
 }
+
+.inventory_card.used .status_badge {
+    background: rgba(255, 69, 0, 0.1);
+    color: #ff4500;
+    border: 1px solid rgba(255, 69, 0, 0.3);
+}
+
+.status_badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 
 .inv_details {
     font-size: 12px;
@@ -282,4 +301,63 @@
     display: flex;
     justify-content: space-between;
     margin-top: 4px;
+}
+
+
+.inv_use_btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--secondary);
+    color: var(--secondary);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.inv_use_btn:hover {
+    background: var(--secondary);
+    color: var(--bg);
+    box-shadow: 0 0 15px rgba(var(--secondary), 0.4);
+    transform: translateY(-2px);
+}
+
+.redemption_area {
+    margin: 5px 0;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.code_display {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.code_value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 3px;
+}
+
+
+.inv_stat .value {
+    color: var(--secondary);
+    font-size: 0.9em;
+}
+
+.inventory_card.expired {
+    opacity: 0.6;
+    filter: grayscale(0.8);
 }

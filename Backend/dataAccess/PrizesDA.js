@@ -38,8 +38,36 @@ async function buyPrize(userId, prizeId) {
     });
 }
 
+
+async function useVoucher(userId, purchaseId) {
+    const purchase = await User_Purchases.findOne({
+        where: {
+            purchase_id: purchaseId,
+            user_id: userId,
+            status: 'ACTIVE'
+        },
+        include: [Nom_Prizes]
+    })
+    if (!purchase) {
+        throw new Error("Voucher not found or already activated/expired");
+    }
+    const expiration = new Date();
+    expiration.setHours(expiration.getHours() + 24);
+    const code = "WC-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    purchase.status = 'USED';
+    purchase.redemption_code = code;
+    purchase.expiry_date = expiration;
+    await purchase.save();
+    return {
+        message: "Voucher activated! Valid for 24 hours.",
+        code: code,
+        expiresAt: expiration
+    };
+}
+
 export {
     getPrizes,
     getUserPurchases,
-    buyPrize
+    buyPrize,
+    useVoucher
 }

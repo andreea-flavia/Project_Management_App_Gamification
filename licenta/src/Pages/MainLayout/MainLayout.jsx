@@ -63,9 +63,14 @@ const MainLayout = () => {
                     {unreadCount > 0 && <span className="notif_badge">{unreadCount}</span>}
                 </button>
                 <div className="user_info_text">
-
+                    {user?.User_Stat && (
+                        <div className="layout_user_stats">
+                            <div className="user_stats">Lvl {user.User_Stat.level} | W-Coins {user.User_Stat.w_coins}</div>
+                        </div>
+                    )}
                     <span className="user_name">{user?.username}</span>
                     <span className="user_role">{user?.role}</span>
+
                 </div>
 
             </div>

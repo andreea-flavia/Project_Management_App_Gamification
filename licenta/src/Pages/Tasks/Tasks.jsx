@@ -18,9 +18,10 @@ const Tasks = () => {
     const [searchText, setSearchText] = useState('');
     const [showFilters, setShowFilters] = useState(false);
     const [sortOrder, setSortOrder] = useState('task_id_desc');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const navigate = useNavigate();
-
     const userRole = localStorage.getItem('user_role');
 
 
@@ -127,6 +128,11 @@ const Tasks = () => {
         sortedTasks.sort((a, b) => b.task_id - a.task_id);
     }
     //task_id_asc
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentTasks = sortedTasks.slice(indexOfFirstItem, indexOfLastItem);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const totalPages = Math.ceil(sortedTasks.length / itemsPerPage);
 
 
     const handleOnTaskClick = (taskId) => {
@@ -156,7 +162,7 @@ const Tasks = () => {
     return (
         <div className='tasks_main'>
             <section className="title_section">
-                <h2 className='title'>TASKS</h2>
+                <h2 className='title'>ASSIGNED TASKS</h2>
                 <div className="status_line">
                     <div className='line'></div>
                     <span>SYSTEM ACTIVE OPERATIONS</span>
@@ -286,8 +292,8 @@ const Tasks = () => {
             )}
 
             <section className="tasks_section">
-                {sortedTasks.length > 0 ? (
-                    sortedTasks.map((task) => (
+                {currentTasks.length > 0 ? (
+                    currentTasks.map((task) => (
                         <div key={task.task_id} className='task_row' onClick={() => handleOnTaskClick(task.task_id)}>
                             <div className='task_info'>
                                 <h4>#{task.task_id} {task.task_title}</h4>
@@ -342,6 +348,19 @@ const Tasks = () => {
                 )}
             </section>
 
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+                        {'<<'}
+                    </button>
+                    <span className="page_info">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages} >
+                        {'>>'}
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

@@ -2,6 +2,8 @@ import User_Stats from '../entities/User_Stats.js';
 import Sequelize from 'sequelize';
 import Users from '../entities/Users.js';
 import { createNotification } from './notificationsDA.js';
+import User_Purchases from '../entities/User_Purchases.js';
+import Nom_Prizes from '../entities/Nom_Prizes.js';
 
 async function createUserStats(userStats) {
     return await User_Stats.create(userStats);
@@ -34,23 +36,41 @@ async function addXP_checkLevel(user_id, xp, w_coins) {
         return null;
     }
 
-    userStats.xp_points += xp;
+    // voucher 2x xp
+    let xpMultiplier = 1;
+    const activeBooster = await User_Purchases.findOne({
+        where: { user_id, status: 'ACTIVE' },
+        include: [{
+            model: Nom_Prizes,
+            where: { prize_id: 3 }
+        }]
+    })
+    if (activeBooster && activeBooster.uses_left > 0) {
+        xpMultiplier = 2;
+        activeBooster.uses_left -= 1;
+        if (activeBooster.uses_left === 0) {
+            activeBooster.status = 'USED';
+        }
+        await activeBooster.save();
+    }
+    //end voucher 2x xp
+    const finalXP = xp * xpMultiplier;
+
+    userStats.xp_points += finalXP;
     userStats.total_xp_points += xp;
     var lvlUp = false;
     userStats.w_coins += w_coins;
-
-
-    console.log("User stats before update:", userStats.toJSON());
+    // console.log("User stats before update:", userStats.toJSON());
 
     while (userStats.xp_points >= userStats.xp_points_req) {
         userStats.level += 1;
         userStats.xp_points = userStats.xp_points - userStats.xp_points_req;
-        // Formula pentru nivelul următor: 100 * (level următor)^2
+        //formula pentru nivelul urm: 100 * (level urm)^2
         userStats.xp_points_req = 100 * ((userStats.level + 1) ** 2);
         lvlUp = true;
     }
 
-    console.log("User stats after update:", userStats.toJSON());
+    // console.log("User stats after update:", userStats.toJSON());
 
     await userStats.save();
 
@@ -111,11 +131,22 @@ async function getLeaderboardData() {
                         where ub.user_id = Users.user_id
                     )`),
                     'badgesCount'
+                ],
+                [
+                    Sequelize.literal(`(
+                        SELECT COUNT(*)
+                        FROM User_Purchases AS up
+                        INNER JOIN Nom_Prizes AS np ON up.prize_id = np.prize_id
+                        WHERE up.user_id = Users.user_id 
+                        AND np.prize_id = 4
+                        AND up.expiry_date > NOW()
+                    )`),
+                    'hasGoldenName'
                 ]
             ],
             include: [{
                 model: User_Stats,
-                attributes: ['level', 'total_xp_points']
+                attributes: ['level', 'total_xp_points', 'w_coins']
             }],
             order: [[User_Stats, 'total_xp_points', 'DESC']],
             limit: 15

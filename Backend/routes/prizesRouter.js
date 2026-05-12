@@ -2,7 +2,8 @@ import express from 'express';
 import {
     getPrizes,
     getUserPurchases,
-    buyPrize
+    buyPrize,
+    useVoucher
 } from '../dataAccess/PrizesDA.js';
 
 let prizesRouter = express.Router();
@@ -32,6 +33,16 @@ prizesRouter.route('/prizes/buy/:id')
         try {
             const purchase = await buyPrize(req.user.userId, req.params.id);
             return res.status(201).json(purchase);
+        } catch (e) {
+            return res.status(400).json({ error: e.message });
+        }
+    });
+
+prizesRouter.route('/prizes/use/:id')
+    .post(async (req, res) => {
+        try {
+            const prize = await useVoucher(req.user.userId, req.params.id);
+            return res.status(201).json(prize);
         } catch (e) {
             return res.status(400).json({ error: e.message });
         }

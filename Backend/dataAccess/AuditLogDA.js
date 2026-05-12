@@ -2,7 +2,7 @@ import AuditLog from "../entities/AuditLog.js";
 import Users from "../entities/Users.js";
 
 async function logAction(userId, action, entityType, entity_id = null, details = null) {
-    try{
+    try {
         await AuditLog.create({
             user_id: userId,
             action: action,
@@ -10,7 +10,7 @@ async function logAction(userId, action, entityType, entity_id = null, details =
             entity_id: entity_id,
             details: typeof details === 'object' ? JSON.stringify(details) : details
         });
-    } catch (error){
+    } catch (error) {
         console.error('AUDIT LOG: Error logging action:', error);
     }
 }
@@ -18,16 +18,17 @@ async function logAction(userId, action, entityType, entity_id = null, details =
 async function getAuditLogs() {
     return await AuditLog.findAll(
         {
-            include: [{model: Users,  attributes: ['username']}],
-            order: [['createdAt', 'DESC']]
+            include: [{ model: Users, attributes: ['username'] }],
+            order: [['createdAt', 'DESC']],
+            limit: 100
         }
     );
 }
 
 async function getAuditLogsByentityId(entity_id) {
-    return await AuditLog.findAll({ 
-        where: { entity_id } ,
-        include: [{model: Users,  attributes: ['username']}],
+    return await AuditLog.findAll({
+        where: { entity_id },
+        include: [{ model: Users, attributes: ['username'] }],
         order: [['createdAt', 'DESC']]
     });
 }

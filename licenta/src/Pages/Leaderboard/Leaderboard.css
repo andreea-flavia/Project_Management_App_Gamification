@@ -289,3 +289,16 @@ tbody td:first-child {
 .rank-3 td:first-child {
     color: #a0522d;
 }
+
+
+
+.golden_name_text {
+    background: linear-gradient(to right, #bf953f, #e7dd47, #b38728, #e7dd47, #aa771c);
+    font-weight: 900;
+    text-shadow: 0px 0px 8px rgba(252, 246, 186, 0.4);
+    animation: shine 3s infinite linear;
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

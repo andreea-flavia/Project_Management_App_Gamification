@@ -98,17 +98,19 @@ const Leaderboard = () => {
                             <th>XP</th>
                             <th>Tasks</th>
                             <th>Badges</th>
+                            <th>Balance</th>
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((user, index) => (
                             <tr key={user.user_id} className={index < 3 ? `top-rank rank-${index + 1}` : ""}>
                                 <td>{index + 1}</td>
-                                <td>{user.username}</td>
+                                <td className={`username_text ${user.hasGoldenName > 0 ? 'golden_name_text' : ''}`}>{user.username}</td>
                                 <td>{user.User_Stat?.level}</td>
                                 <td>{user.User_Stat?.total_xp_points}</td>
                                 <td>{user.completedTasksCount}</td>
                                 <td>{user.badgesCount}</td>
+                                <td> {user.User_Stat?.w_coins} W-Coins</td>
                             </tr>
                         ))}
                     </tbody>

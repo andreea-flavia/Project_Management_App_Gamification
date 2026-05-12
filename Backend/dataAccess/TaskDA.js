@@ -2,11 +2,12 @@ import Tasks from '../entities/Tasks.js';
 import Priorities from '../entities/Nom_priority.js';
 import Statuses from '../entities/Nom_status.js';
 import Nom_Tags from '../entities/Nom_tags.js';
-import { addXP_checkLevel } from './User_StatsDA.js';
+import { addXP_checkLevel, getUserStatsByUserId } from './User_StatsDA.js';
 import Project_Members from '../entities/Project_Members.js';
 import { checkUserForBadges } from './Nom_BadgesDA.js';
 import { createNotification } from './notificationsDA.js';
 import Users from '../entities/Users.js';
+import { Op } from 'sequelize';
 
 
 async function createTask(task) {
@@ -178,6 +179,42 @@ async function countCompletedTask(userId) {
 }
 
 
+async function checkMissedDeadlines() {
+    try {
+        const expiredTasks = await Tasks.findAll({
+            where: {
+                status: { [Op.notIn]: [4, 6] },
+                end_date: { [Op.lt]: new Date() }
+            }
+        })
+
+        if (expiredTasks.length > 0) {
+            for (let task of expiredTasks) {
+                task.status = 6;
+                await task.save();
+                if (task.assigned_to) {
+                    await createNotification(
+                        task.assigned_to,
+                        "Missed Deadline!",
+                        `You missed the deadline for task #${task.task_id} (${task.task_title}). 100 W-Coins have been substracted from your balance.`,
+                        "SYSTEM",
+                        task.task_id
+                    );
+                    const userStats = await getUserStatsByUserId(task.assigned_to);
+                    if (userStats) {
+                        userStats.w_coins = Math.max(0, userStats.w_coins - 100);
+                        await userStats.save();
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Eroare la verificarea deadline-urilor:", error);
+
+    }
+}
+
+
 export {
     createTask,
     getTasks,
@@ -186,5 +223,6 @@ export {
     deleteTask,
     getTasksByUserId,
     markCompleted,
-    countCompletedTask
+    countCompletedTask,
+    checkMissedDeadlines
 }

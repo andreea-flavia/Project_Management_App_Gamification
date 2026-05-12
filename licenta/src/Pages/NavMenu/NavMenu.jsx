@@ -16,7 +16,7 @@ const NavMenu = ({ isOpen, onClose }) => {
         { name: 'Home', path: '/home', icon: 'home' },
         { name: 'Tasks', path: '/tasks', icon: 'checklist' },
         { name: 'Projects', path: '/projects', icon: 'account_tree' },
-        { name: 'My Team (Leaderboard)', path: '/leaderboard', icon: 'group' },
+        { name: 'Leaderboard', path: '/leaderboard', icon: 'group' },
         { name: 'My Progress', path: '/profile', icon: 'account_circle' },
         { name: 'Shop', path: '/shop', icon: 'storefront' },
         // ...(hasAccessToAnalytics ? [{ name: 'Analytics', path: '/analytics', icon: 'insights' }] : [])

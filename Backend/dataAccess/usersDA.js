@@ -42,11 +42,16 @@ async function getUsers() {
 async function getUserById(id) {
     return await Users.findByPk(id, {
         attributes: { exclude: ['user_password_hash'] },
-        include: [{
-            model: Nom_Badges,
-            as: 'badges',
-            through: { attributes: [] }
-        }]
+        include: [
+            {
+                model: Nom_Badges,
+                as: 'badges',
+                through: { attributes: [] }
+            },
+            {
+                model: User_Stats
+            }
+        ]
     });
 }
 

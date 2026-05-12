@@ -26,6 +26,10 @@ const User_Purchases = db.define('User_Purchases', {
     expiry_date: {
         type: Sequelize.DATE,
         allowNull: true
+    },
+    redemption_code: {
+        type: Sequelize.STRING,
+        allowNull: true
     }
 });
 

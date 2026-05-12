@@ -78,8 +78,9 @@ function PK_Config() {
     Users.belongsToMany(Nom_Badges, { through: 'User_Badges', foreignKey: 'user_id', as: 'badges' });
     Nom_Badges.belongsToMany(Users, { through: 'User_Badges', foreignKey: 'badge_id', as: 'owners' });
 
-    Users.belongsToMany(Nom_Prizes, { through: 'User_Purchases', foreignKey: 'user_id', as: 'purchasedPrizes' });
-    Nom_Prizes.belongsToMany(Users, { through: 'User_Purchases', foreignKey: 'prize_id', as: 'buyers' });
+    Users.belongsToMany(Nom_Prizes, { through: User_Purchases, foreignKey: 'user_id', as: 'purchasedPrizes', unique: false });
+    Nom_Prizes.belongsToMany(Users, { through: User_Purchases, foreignKey: 'prize_id', as: 'buyers', unique: false });
+
 
     // ------------- 1-1 -------------//
     Users.hasOne(User_Stats, { foreignKey: 'user_id' });

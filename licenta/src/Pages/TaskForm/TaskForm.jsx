@@ -101,7 +101,7 @@ const TaskForm = () => {
             }
         }
         fetchData();
-    }, [id]);
+    }, [id, userRole]);
 
     const handleChange = (e) => {
         try {
@@ -458,11 +458,6 @@ const TaskForm = () => {
                         )}
 
                     </div>
-                </div>
-
-                <div className="comments_section">
-                    <h2>Comments</h2>
-                    <p className='no_comments'>No comments yet.</p>
                 </div>
 
                 {userRole === ROLES.ADMIN && (
