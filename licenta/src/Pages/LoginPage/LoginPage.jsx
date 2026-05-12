@@ -109,7 +109,11 @@ const LoginPage = () => {
 
                         <div className="req_access">
                             <p className="req_text">First time?</p>
-                            <button type="button" className="req_btn">
+                            <button
+                                type="button"
+                                className="req_btn"
+                                onClick={() => alert("To obtain your access credentials, please contact the IT department at: admin@syncro.ro")}
+                            >
                                 Get your account
                             </button>
                         </div>
