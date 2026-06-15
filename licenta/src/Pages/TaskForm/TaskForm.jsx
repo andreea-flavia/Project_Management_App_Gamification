@@ -177,8 +177,10 @@ const TaskForm = () => {
                     const response = await api.put(`/task/${id}`, taskToSave);
                     setTask(response.data);
 
-                    const logsResponse = await api.get(`/logs/${id}`);
-                    setLogs(logsResponse.data);
+                    if (userRole === ROLES.ADMIN) {
+                        const logsResponse = await api.get(`/logs/${id}`);
+                        setLogs(logsResponse.data);
+                    }
                     alert('Task updated successfully!');
                     window.location.reload();
 
@@ -242,6 +244,40 @@ const TaskForm = () => {
         });
     };
 
+    const submitReview = async () => {
+        const confirm = window.confirm('Submit this task for review?');
+        if (!confirm) return;
+        try {
+            const resp = await api.patch(`/task/${id}`);
+            setTask(resp.data);
+            setInitialStatus(resp.data.status);
+            alert('Task submitted for review!');
+        } catch (e) {
+            console.error('Error submitting task:', e);
+            alert('Failed to submit task');
+        }
+    }
+    const handleApprove = async () => {
+        try {
+            const resp = await api.patch(`/task/${id}/approve`);
+            setTask(resp.data);
+            setInitialStatus(resp.data.status);
+            alert('Task approved! Rewards given to the employee.');
+        } catch (e) {
+            alert('Failed to approve task');
+        }
+    }
+    const handleReject = async () => {
+        try {
+            const resp = await api.patch(`/task/${id}/reject`);
+            setTask(resp.data);
+            setInitialStatus(resp.data.status);
+            alert('Task rejected and sent back to progress.');
+        } catch (e) {
+            alert('Failed to reject task');
+        }
+    }
+
     return (
         <main className="main_content">
             <div className='header_section'>
@@ -249,21 +285,40 @@ const TaskForm = () => {
                     <Link className='btn_back' to={`/tasks`}>
                         {'<<'} Back
                     </Link>
-                    {initialStatus !== 4 && !isViewOnly && (
-                        <div>
-                            {/* <button className='btn_delete_task' onClick={handleDelete}>
-                                Delete task
-                            </button> */}
 
-                            <button className='btn_commit' onClick={handleSave} >  {/*to={`/tasks`}*/}
-                                Commit Changes {'>>'}
-                            </button>
+                    {initialStatus !== 4 && !isViewOnly && (
+                        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                            {initialStatus !== 13 && (
+                                <button className='btn_commit' onClick={handleSave} >
+                                    Commit Changes {'>>'}
+                                </button>
+                            )}
+                            {id && initialStatus !== 13 && (
+                                <button type="button" className='btn_mark_comp_form' onClick={submitReview}>
+                                    Submit for Review
+                                </button>
+                            )}
+                            {id && initialStatus === 13 && userRole === ROLES.STANDARD && (
+                                <div style={{ color: '#5AC7E8', fontWeight: 'bold', fontSize: '15px', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    Waiting for manager's approval...
+                                </div>
+                            )}
+                            {id && initialStatus === 13 && (userRole === ROLES.ADMIN || userRole === ROLES.MANAGER) && (
+                                <div className="review_actions" style={{ marginTop: '0' }}>
+                                    <button type="button" className="btn_approve_form" onClick={handleApprove}>
+                                        Approve
+                                    </button>
+                                    <button type="button" className="btn_reject_form" onClick={handleReject}>
+                                        Reject
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
+
                     {initialStatus === 4 && (
                         <div className='label_task_completed'> {'<<'} Task already completed {'>>'} </div>
                     )}
-
                     {error && (
                         <div className="task_error_text">
                             {error}
@@ -325,6 +380,7 @@ const TaskForm = () => {
                                 value={task.end_date ? task.end_date.split('T')[0] : ''}
                                 onChange={handleChange}
                                 name="end_date"
+                                disabled={isCompleted || isViewOnly || userRole === ROLES.STANDARD}
                             />
                         </div>
                     </div>
@@ -337,7 +393,7 @@ const TaskForm = () => {
                                 value={task.priority || ''}
                                 name="priority"
                                 onChange={handleChange}
-                                disabled={isCompleted || isViewOnly}
+                                disabled={isCompleted || isViewOnly || userRole === ROLES.STANDARD}
                             >
                                 <option value="" disabled>Select priority</option>
                                 {priorityOptions.map(op => (
@@ -355,7 +411,7 @@ const TaskForm = () => {
                                 value={task.status || ''}
                                 name="status"
                                 onChange={handleChange}
-                                disabled={isCompleted || isViewOnly}
+                                disabled={isCompleted || isViewOnly || userRole === ROLES.STANDARD}
                             >
                                 <option value="" disabled>Select status</option>
                                 {statusOptions.map(op => (
@@ -378,7 +434,7 @@ const TaskForm = () => {
                                             className={`tag_chip ${selected ? 'active' : ''}`}
                                             //  style={{ backgroundColor: tag.color || '#424242' }}
                                             onClick={() => handleTagToggle(tag.tag_id)}
-                                            disabled={isCompleted || isViewOnly}
+                                            disabled={isCompleted || isViewOnly || userRole === ROLES.STANDARD}
                                         >
                                             {tag.tag_name}
                                         </button>

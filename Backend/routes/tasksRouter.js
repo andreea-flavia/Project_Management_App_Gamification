@@ -13,7 +13,10 @@ import {
     deleteTask,
     getTasksByUserId,
     markCompleted,
-    countCompletedTask
+    countCompletedTask,
+    submitForReview,
+    approveTask,
+    rejectTask
 } from '../dataAccess/TaskDA.js';
 
 import { logAction } from '../dataAccess/AuditLogDA.js';
@@ -94,10 +97,43 @@ tasksRouter.route('/task/:id')
         return res.status(404).json({ error: 'Task not found' });
     })
     .patch(async (req, res) => {
-        const task = await markCompleted(req.params.id);
-        if (task)
-            return res.json(task);
-        return res.status(404).json({ error: 'Task not found' });
+        try {
+            const task = await submitForReview(req.params.id);
+            if (task) {
+                await logAction(req.user.userId, LOG_ACTIONS.UPDATE, LOG_ENTITY_TYPES.TASK, task.task_id, { status: "Submitted for Review" });
+                return res.json(task);
+            }
+            return res.status(404).json({ error: 'Task not found' });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+    });
+
+tasksRouter.route('/task/:id/approve')
+    .patch(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
+        try {
+            const task = await approveTask(req.params.id);
+            if (task) {
+                await logAction(req.user.userId, LOG_ACTIONS.UPDATE, LOG_ENTITY_TYPES.TASK, task.task_id, { status: "Approved & Completed" });
+                return res.json(task);
+            }
+            return res.status(404).json({ error: 'Task not found' });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+    });
+tasksRouter.route('/task/:id/reject')
+    .patch(verifyRole(ROLES.ADMIN, ROLES.MANAGER), async (req, res) => {
+        try {
+            const task = await rejectTask(req.params.id);
+            if (task) {
+                await logAction(req.user.userId, LOG_ACTIONS.UPDATE, LOG_ENTITY_TYPES.TASK, task.task_id, { status: "Rejected - Back to Progress" });
+                return res.json(task);
+            }
+            return res.status(404).json({ error: 'Task not found' });
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
     });
 
 tasksRouter.route('/tasks/user/:userId')

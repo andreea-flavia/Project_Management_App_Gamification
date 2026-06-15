@@ -5,11 +5,13 @@ export const verifToken = (req, res, next) => {
     if (!token) {
         return res.status(401).json({ error: 'No acces! Token missing' });
     }
-    try{
+    try {
         const dec = jwt.verify(token, process.env.JWT_SECRET);
         req.user = dec;
         next();
-    } catch(e){
+    } catch (e) {
         return res.status(403).json({ error: 'Invalid token' });
     }
 };
+
+

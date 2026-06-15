@@ -55,12 +55,14 @@ const Leaderboard = () => {
                             <img src={topThree[1]?.picture_url} alt="Op 2" />
                             <div className="ld_lvl_tag">LVL {topThree[1]?.User_Stat?.level}</div>
                         </div>
-                        <h3 className="ld_op_name">{topThree[1]?.username}</h3>
+                        <h3 className="ld_op_name">
+                            {topThree[1]?.username} {topThree[1]?.role === 'Admin' ? '(A)' : topThree[1]?.role === 'Manager' ? '(M)' : ''}
+                        </h3>
                         <div className="ld_op_xp">{topThree[1]?.User_Stat?.total_xp_points} XP</div>
                     </div>
                 </div>
 
-                {/* Locul 1 - Main Highlight */}
+                {/* Locul 1 */}
                 <div className="ld_podium_card ld_rank_1">
                     <div className="ld_rank_number">#01</div>
                     <div className="ld_operator_info">
@@ -68,7 +70,9 @@ const Leaderboard = () => {
                             <img src={topThree[0]?.picture_url} alt="Op 1" />
                             <div className="ld_lvl_tag">LVL {topThree[0]?.User_Stat?.level}</div>
                         </div>
-                        <h3 className="ld_op_name">{topThree[0]?.username}</h3>
+                        <h3 className="ld_op_name">
+                            {topThree[0]?.username} {topThree[0]?.role === 'Admin' ? '(A)' : topThree[0]?.role === 'Manager' ? '(M)' : ''}
+                        </h3>
                         <div className="ld_op_xp">{topThree[0]?.User_Stat?.total_xp_points} XP</div>
                     </div>
                 </div>
@@ -81,7 +85,9 @@ const Leaderboard = () => {
                             <img src={topThree[2]?.picture_url} alt="Op 3" />
                             <div className="ld_lvl_tag">LVL {topThree[2]?.User_Stat?.level}</div>
                         </div>
-                        <h3 className="ld_op_name">{topThree[2]?.username}</h3>
+                        <h3 className="ld_op_name">
+                            {topThree[2]?.username} {topThree[2]?.role === 'Admin' ? '(A)' : topThree[2]?.role === 'Manager' ? '(M)' : ''}
+                        </h3>
                         <div className="ld_op_xp">{topThree[2]?.User_Stat?.total_xp_points} XP</div>
                     </div>
                 </div>
@@ -105,7 +111,9 @@ const Leaderboard = () => {
                         {users.map((user, index) => (
                             <tr key={user.user_id} className={index < 3 ? `top-rank rank-${index + 1}` : ""}>
                                 <td>{index + 1}</td>
-                                <td className={`username_text ${user.hasGoldenName > 0 ? 'golden_name_text' : ''}`}>{user.username}</td>
+                                <td className={`username_text ${user.hasGoldenName > 0 ? 'golden_name_text' : ''}`}>
+                                    {user.username} {user.role === 'Admin' ? '(A)' : user.role === 'Manager' ? '(M)' : ''}
+                                </td>
                                 <td>{user.User_Stat?.level}</td>
                                 <td>{user.User_Stat?.total_xp_points}</td>
                                 <td>{user.completedTasksCount}</td>

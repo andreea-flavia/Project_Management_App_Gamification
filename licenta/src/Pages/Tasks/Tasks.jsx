@@ -155,6 +155,44 @@ const Tasks = () => {
         }
     }
 
+    const submitReview = async (task_id) => {
+        const confirm = window.confirm('Submit this task for review?');
+        if (!confirm) {
+            return
+        };
+
+        try {
+            const resp = await api.patch(`/task/${task_id}`);
+            const updatedTask = resp.data;
+            setTasks(prevTasks => prevTasks.map(t => t.task_id === task_id ? updatedTask : t));
+            alert('Task submitted for review!');
+        } catch (e) {
+            console.error('Error submitting task:', e);
+            alert('Failed to submit task');
+        }
+    }
+
+    const handleApprove = async (task_id) => {
+        try {
+            const resp = await api.patch(`/task/${task_id}/approve`);
+            setTasks(prevTasks => prevTasks.map(t => t.task_id === task_id ? resp.data : t));
+            alert('Task approved! Rewards given to the employee.');
+        } catch (e) {
+            alert('Failed to approve task');
+        }
+    }
+    const handleReject = async (task_id) => {
+        try {
+            const resp = await api.patch(`/task/${task_id}/reject`);
+            setTasks(prevTasks => prevTasks.map(t => t.task_id === task_id ? resp.data : t));
+            alert('Task rejected and sent back to progress.');
+        } catch (e) {
+            alert('Failed to reject task');
+        }
+    }
+
+
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -331,14 +369,29 @@ const Tasks = () => {
                                 </div>
 
                                 <div className='status_text'>
-                                    {task.status !== 4 && (
+                                    {(task.status !== 4 && task.status !== 13) && (
                                         <button onClick={(e) => {
                                             e.stopPropagation();
-                                            completeTask(task.task_id);
+                                            submitReview(task.task_id);
                                         }}
-                                            className='btn_mark_comp'>Mark Completed</button>
+                                            className='btn_mark_comp'>Submit for Review</button>
                                     )}
-
+                                    {task.status === 13 && (userRole === ROLES.ADMIN || userRole === ROLES.MANAGER) && (
+                                        <div className="review_actions">
+                                            <button
+                                                className="btn_approve"
+                                                onClick={(e) => { e.stopPropagation(); handleApprove(task.task_id); }}
+                                            >
+                                                Approve
+                                            </button>
+                                            <button
+                                                className="btn_reject"
+                                                onClick={(e) => { e.stopPropagation(); handleReject(task.task_id); }}
+                                            >
+                                                Reject
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

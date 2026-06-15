@@ -115,7 +115,9 @@ const Shop = () => {
                     <div className="redemption_area">
                         <div className="code_display">
                             <span className="label">REDEMPTION CODE:</span>
-                            <span className="code_value">{item.redemption_code}</span>
+                            <span className="code_value" style={{ color: item.status !== 'ACTIVE' ? '#F01818' : 'inherit' }}>
+                                {item.status === 'ACTIVE' ? item.redemption_code : 'CODE EXPIRED'}
+                            </span>
                         </div>
                     </div>
                 )}
@@ -127,7 +129,7 @@ const Shop = () => {
                         </span>
                     </div>
                 )}
-                {item.status === 'ACTIVE' && item.Nom_Prize?.type === 'VOUCHER' && (
+                {item.status === 'ACTIVE' && item.Nom_Prize?.type === 'VOUCHER' && !item.redemption_code && (
                     <button
                         className="inv_use_btn"
                         onClick={() => handleUse(item.purchase_id)}
@@ -194,22 +196,37 @@ const Shop = () => {
                 <div className="shop_section_header">
                     <div className="shop_title_group">
                         <span className="material-symbols-outlined">inventory_2</span>
-                        <h3 className="shop_section_title">Inventory</h3>
+                        <h3 className="shop_section_title">Active Inventory</h3>
                     </div>
                     <div className="shop_header_line"></div>
                 </div>
-
                 <div className="inventory_grid">
-                    {myPrizes.length === 0 ? (
+                    {myPrizes.filter(item => item.status === 'ACTIVE').length === 0 ? (
                         <div className="empty_inventory">
-                            <p>No items in your inventory.</p>
+                            <p>No active items in your inventory.</p>
                         </div>
                     ) : (
-                        myPrizes.map(item => (
+                        myPrizes.filter(item => item.status === 'ACTIVE').map(item => (
                             <InventoryCard key={item.purchase_id} item={item} />
                         ))
                     )}
                 </div>
+                {myPrizes.filter(item => item.status !== 'ACTIVE').length > 0 && (
+                    <>
+                        <div className="shop_section_header" style={{ marginTop: '50px' }}>
+                            <div className="shop_title_group">
+                                <span className="material-symbols-outlined" style={{ color: '#888' }}>history</span>
+                                <h3 className="shop_section_title" style={{ color: '#888' }}>Past Items</h3>
+                            </div>
+                            <div className="shop_header_line" style={{ borderColor: '#444' }}></div>
+                        </div>
+                        <div className="inventory_grid" style={{ opacity: '0.6' }}>
+                            {myPrizes.filter(item => item.status !== 'ACTIVE').map(item => (
+                                <InventoryCard key={item.purchase_id} item={item} />
+                            ))}
+                        </div>
+                    </>
+                )}
             </section>
         </div>
     );

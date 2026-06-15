@@ -215,6 +215,82 @@ async function checkMissedDeadlines() {
 }
 
 
+async function submitForReview(id) {
+    const task = await Tasks.findByPk(id);
+    if (!task) {
+        return null;
+    }
+    if (!task.assigned_to) {
+        throw new Error("Cannont submit an unassigned task. Please assign it to someone first!");
+    }
+    if (task.status === 4) {
+        return task;
+    }
+
+    task.status = 13; //IN_REVIEW
+    await task.save();
+    return await getTaskById(id);
+}
+
+async function approveTask(id) {
+    const task = await Tasks.findByPk(id);
+    if (!task) {
+        return null;
+    }
+    if (task.status === 4) {
+        return task;
+    }
+    task.status = 4; //COMPLETED
+    await task.save();
+    if (task.assigned_to) {
+        try {
+            await createNotification(
+                task.assigned_to,
+                "Task Approved!",
+                `Your work on task #${task.task_id} (${task.task_title}) has been approved! Rewards have been added to your profile.`,
+                "SYSTEM",
+                task.task_id
+            );
+        } catch (e) {
+            console.error("Error creating approve notification: ", e);
+        }
+    }
+    if (task.assigned_to && task.xp_points) {
+        try {
+            await addXP_checkLevel(task.assigned_to, task.xp_points, Math.floor(task.xp_points / 10));
+            await checkUserForBadges(task.assigned_to);
+            console.log(`[SYSTEM] Task ${id} approved. Added XP and checked badges for user ${task.assigned_to}`);
+        } catch (e) {
+            console.error('Error adding XP & checking for badges:', e);
+        }
+    }
+    return await getTaskById(id);
+}
+
+async function rejectTask(id) {
+    const task = await Tasks.findByPk(id);
+    if (!task) {
+        return null;
+    }
+    task.status = 2; //IN_PROGRESS
+    await task.save();
+    if (task.assigned_to) {
+        try {
+            await createNotification(
+                task.assigned_to,
+                "Task Rejected!",
+                `Your work on task #${task.task_id} (${task.task_title}) has been rejected. It was moved back to 'In Progress'.`,
+                "SYSTEM",
+                task.task_id
+            );
+        } catch (e) {
+            console.error("Error creating reject notification: ", e);
+        }
+    }
+    return await getTaskById(id);
+}
+
+
 export {
     createTask,
     getTasks,
@@ -224,5 +300,8 @@ export {
     getTasksByUserId,
     markCompleted,
     countCompletedTask,
-    checkMissedDeadlines
+    checkMissedDeadlines,
+    submitForReview,
+    approveTask,
+    rejectTask
 }

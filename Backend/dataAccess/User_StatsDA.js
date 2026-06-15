@@ -53,10 +53,9 @@ async function addXP_checkLevel(user_id, xp, w_coins) {
         }
         await activeBooster.save();
     }
-    //end voucher 2x xp
     const finalXP = xp * xpMultiplier;
-
     userStats.xp_points += finalXP;
+
     userStats.total_xp_points += xp;
     var lvlUp = false;
     userStats.w_coins += w_coins;
@@ -69,9 +68,7 @@ async function addXP_checkLevel(user_id, xp, w_coins) {
         userStats.xp_points_req = 100 * ((userStats.level + 1) ** 2);
         lvlUp = true;
     }
-
     // console.log("User stats after update:", userStats.toJSON());
-
     await userStats.save();
 
     if (lvlUp) {
@@ -116,6 +113,7 @@ async function getLeaderboardData() {
                 'user_id',
                 'username',
                 'picture_url',
+                'role',
                 [
                     Sequelize.literal(`(
                         select COUNT(*)

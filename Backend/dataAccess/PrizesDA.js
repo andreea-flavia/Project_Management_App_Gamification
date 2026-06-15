@@ -2,12 +2,25 @@ import Nom_Prizes from '../entities/Nom_Prizes.js';
 import User_Purchases from '../entities/User_Purchases.js';
 import User_Stats from '../entities/User_Stats.js';
 import db from '../dbConfig.js';
+import { Op } from 'sequelize';
 
 async function getPrizes() {
     return await Nom_Prizes.findAll();
 }
 
 async function getUserPurchases(userId) {
+    await User_Purchases.update(
+        { status: 'USED' },
+        {
+            where: {
+                user_id: userId,
+                status: 'ACTIVE',
+                expiry_date: {
+                    [Op.lt]: new Date()
+                }
+            }
+        }
+    );
     return await User_Purchases.findAll({
         where: { user_id: userId },
         include: [{ model: Nom_Prizes }]
@@ -54,7 +67,7 @@ async function useVoucher(userId, purchaseId) {
     const expiration = new Date();
     expiration.setHours(expiration.getHours() + 24);
     const code = "WC-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-    purchase.status = 'USED';
+    // purchase.status = 'USED';
     purchase.redemption_code = code;
     purchase.expiry_date = expiration;
     await purchase.save();
