@@ -77,19 +77,19 @@
 }
 
 .audit_table th:nth-child(1) {
-    width: 20px;
+    width: 25px;
 }
 
 .audit_table th:nth-child(2) {
-    width: 160px;
+    width: 180px;
 }
 
 .audit_table th:nth-child(3) {
-    width: 70px;
+    width: 55px;
 }
 
 .audit_table th:nth-child(4) {
-    width: 80px;
+    width: 90px;
 }
 
 
@@ -107,7 +107,7 @@
 
 
 .audit_table th:nth-child(8) {
-    width: 350px;
+    width: 330px;
 }
 
 .audit_table tr:hover {

@@ -369,7 +369,7 @@ const Tasks = () => {
                                 </div>
 
                                 <div className='status_text'>
-                                    {(task.status !== 4 && task.status !== 13) && (
+                                    {(task.status !== 4 && task.status !== 13 && userRole === ROLES.STANDARD) && (
                                         <button onClick={(e) => {
                                             e.stopPropagation();
                                             submitReview(task.task_id);

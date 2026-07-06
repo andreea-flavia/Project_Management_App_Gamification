@@ -65,9 +65,13 @@
 
 
 .prj_form_parent {
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
+    gap: 8px; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 140px 1fr 1fr;
     gap: 8px;
 
 

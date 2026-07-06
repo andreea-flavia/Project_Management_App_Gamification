@@ -159,16 +159,16 @@ const Projects = () => {
                 <div className="prj_modal_overlay">
                     <div className="prj_modal_content">
                         <div className="prj_modal_header">
-                            <h3>INITIATE_NEW_PROJECT</h3>
+                            <h3>INITIATE NEW PROJECT</h3>
                             <button className="prj_modal_close" onClick={() => setIsModalOpen(false)}>×</button>
                         </div>
                         <form onSubmit={handleCreateProject} className="prj_modal_form">
                             <div className="prj_form_group">
-                                <label>PROJECT_NAME</label>
+                                <label>PROJECT NAME</label>
                                 <input
                                     type="text"
                                     required
-                                    placeholder="Enter project title..."
+                                    placeholder="Enter project title"
                                     value={newProject.project_name}
                                     onChange={(e) => setNewProject({ ...newProject, project_name: e.target.value })}
                                 />
@@ -176,7 +176,7 @@ const Projects = () => {
                             <div className="prj_form_group">
                                 <label>DESCRIPTION</label>
                                 <textarea
-                                    placeholder="Short project overview..."
+                                    placeholder="Short project overview"
                                     value={newProject.project_description}
                                     onChange={(e) => setNewProject({ ...newProject, project_description: e.target.value })}
                                 />

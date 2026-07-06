@@ -40,8 +40,16 @@ const ProjectForm = () => {
                 if (id) {
                     const r = await api.get(`/project/${id}`);
                     setProject(r.data);
-                    const logsResponse = await api.get(`/logs/${id}`);
-                    setLogs(logsResponse.data);
+                    // const logsResponse = await api.get(`/logs/${id}`);
+                    // setLogs(logsResponse.data);
+                    if (userRole === ROLES.ADMIN) {
+                        try {
+                            const logsResponse = await api.get(`/logs/${id}`);
+                            setLogs(logsResponse.data);
+                        } catch (logError) {
+                            console.error('Error fetching logs:', logError);
+                        }
+                    }
 
                     const statsResponse = await api.get(`/project/${id}/stats`);
                     setStats(statsResponse.data);

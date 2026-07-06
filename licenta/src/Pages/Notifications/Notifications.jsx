@@ -90,7 +90,7 @@ const Notifications = ({ isOpen, onClose, onRefreshCount }) => {
                                 <div className="notif_content">
                                     <div className="notif_meta">
                                         <span className="notif_type_label">{notif.type}</span>
-                                        <span className="notif_date">{new Date(notif.createdAt).toLocaleTimeString()}</span>
+                                        <span className="notif_date">{new Date(notif.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
                                     </div>
                                     <h4 className="notif_subject">{notif.title}</h4>
                                     <p className="notif_body">{notif.message}</p>

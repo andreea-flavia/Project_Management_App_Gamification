@@ -8,7 +8,7 @@ import {
 const Analytics = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [timeRange, setTimeRange] = useState(30);
+    const [timeRange, setTimeRange] = useState(90);
     useEffect(() => {
         const fetchAnalytics = async () => {
             try {
@@ -99,7 +99,7 @@ const Analytics = () => {
                             <p className="analytics_chart_subtitle">Overall Total Tasks vs. Completed Tasks</p>
                             <p className="analytics_chart_subtitle">
                                 {data?.cfdData && data.cfdData.length > 0
-                                    ? `${data.cfdData[0].date} — ${data.cfdData[data.cfdData.length - 1].date}`
+                                    ? `${new Date(data.cfdData[0].date).toLocaleDateString('ro-RO').replaceAll('.', '-')} — ${new Date(data.cfdData[data.cfdData.length - 1].date).toLocaleDateString('ro-RO').replaceAll('.', '-')}`
                                     : "No data flow analysis available."
                                 }
                             </p>
@@ -117,10 +117,18 @@ const Analytics = () => {
                                 className={`analytics_btn_tab ${timeRange === 30 ? 'analytics_active' : ''}`}
                                 onClick={() => setTimeRange(30)}
                             >30D</button>
+                            <button
+                                className={`analytics_btn_tab ${timeRange === 90 ? 'analytics_active' : ''}`}
+                                onClick={() => setTimeRange(90)}
+                            >3M</button>
+                            <button
+                                className={`analytics_btn_tab ${timeRange === 180 ? 'analytics_active' : ''}`}
+                                onClick={() => setTimeRange(180)}
+                            >6M</button>
                         </div>
                     </div>
 
-                    {/* Zona unde vei genera graficul */}
+                    {/*graficul */}
                     <div className="analytics_chart_area">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={data?.cfdData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
